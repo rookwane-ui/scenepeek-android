@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.divinelink.core.designsystem.theme.LocalDarkThemeProvider
 import com.divinelink.core.designsystem.theme.rememberSystemUiController
+import com.divinelink.core.domain.components.SwitchViewButtonViewModel
 import com.divinelink.core.model.UIText
 import com.divinelink.core.navigation.route.Navigation
 import com.divinelink.core.scaffold.PersistentNavigationBar
@@ -35,6 +36,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun AnimatedVisibilityScope.CollectionsScreen(
   onNavigate: (Navigation) -> Unit,
   viewModel: CollectionsViewModel = koinViewModel(),
+  switchViewButtonViewModel: SwitchViewButtonViewModel = koinViewModel(),
 ) {
   val uiState by viewModel.uiState.collectAsStateWithLifecycle()
   val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
@@ -101,6 +103,8 @@ fun AnimatedVisibilityScope.CollectionsScreen(
           uiState = uiState,
           onBackdropLoaded = { onBackdropLoaded = true },
           toolbarProgress = { progress -> toolbarProgress = progress },
+          onSwitchPreferences = switchViewButtonViewModel::onAction,
+          onAction = viewModel::onAction,
           onNavigate = onNavigate,
         )
       }

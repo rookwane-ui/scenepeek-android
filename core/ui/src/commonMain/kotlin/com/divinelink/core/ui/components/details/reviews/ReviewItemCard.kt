@@ -73,6 +73,7 @@ fun ReviewItemCard(
     }
     SimpleExpandingText(
       modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.keyline_16),
+      style = MaterialTheme.typography.bodyMedium,
       text = review.content.markdownToHtml().fromHtml(),
     )
 

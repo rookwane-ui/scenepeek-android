@@ -2,11 +2,17 @@ package com.divinelink.feature.collections
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.divinelink.core.data.details.repository.DetailsRepository
 import com.divinelink.core.navigation.route.Navigation
+import com.divinelink.core.ui.blankslate.BlankSlateState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class CollectionsViewModel(
+  private val repository: DetailsRepository,
   savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -23,7 +29,46 @@ class CollectionsViewModel(
   val uiState: StateFlow<CollectionsUiState> = _uiState
 
   init {
+    fetchCollectionDetails()
+  }
 
+  fun onAction(action: CollectionsAction) {
+    when (action) {
+      CollectionsAction.Refresh -> fetchCollectionDetails()
+    }
+  }
+
+  private fun fetchCollectionDetails() {
+    _uiState.update { uiState ->
+      uiState.copy(
+        loading = true,
+        error = null,
+      )
+    }
+
+    viewModelScope.launch {
+      repository
+        .fetchCollectionDetails(id = uiState.value.id)
+        .fold(
+          onSuccess = { details ->
+            _uiState.update { uiState ->
+              uiState.copy(
+                loading = false,
+                error = null,
+                overview = details.overview,
+                movies = details.movies.sortedBy { it.releaseDate },
+              )
+            }
+          },
+          onFailure = {
+            _uiState.update { uiState ->
+              uiState.copy(
+                loading = false,
+                error = BlankSlateState.Generic,
+              )
+            }
+          },
+        )
+    }
   }
 }
-

@@ -6,4 +6,3 @@ import com.divinelink.feature.collections.CollectionsUiState
 class CollectionsUiStateParameterProvider : PreviewParameterProvider<CollectionsUiState> {
   override val values: Sequence<CollectionsUiState> = sequenceOf()
 }
-

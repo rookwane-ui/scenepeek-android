@@ -16,6 +16,7 @@ import com.divinelink.core.database.media.dao.MediaDao
 import com.divinelink.core.model.PaginationData
 import com.divinelink.core.model.account.AccountMediaDetails
 import com.divinelink.core.model.credits.AggregateCredits
+import com.divinelink.core.model.details.CollectionDetails
 import com.divinelink.core.model.details.MediaDetails
 import com.divinelink.core.model.details.TV
 import com.divinelink.core.model.details.rating.ExternalRatings
@@ -27,6 +28,7 @@ import com.divinelink.core.model.media.MediaItem
 import com.divinelink.core.model.media.MediaReference
 import com.divinelink.core.model.media.MediaType
 import com.divinelink.core.network.Resource
+import com.divinelink.core.network.media.mapper.details.map
 import com.divinelink.core.network.media.mapper.find.map
 import com.divinelink.core.network.media.model.MediaRequestApi
 import com.divinelink.core.network.media.model.credits.AggregateCreditsApi
@@ -254,4 +256,8 @@ class ProdDetailsRepository(
     .map {
       Result.success(it.map())
     }
+
+  override suspend fun fetchCollectionDetails(id: Int): Result<CollectionDetails> = mediaRemote
+    .fetchCollectionDetails(id)
+    .map { it.map() }
 }

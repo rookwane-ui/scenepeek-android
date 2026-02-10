@@ -44,7 +44,7 @@ object DetailsDataFactory {
       genres = MediaDetailsFactory.FightClub().genres,
       creators = MediaDetailsFactory.FightClub().creators,
       information = MediaDetailsFactory.FightClub().information,
-      collection = null, //MediaDetailsFactory.FightClub().information
+      collection = null, // MediaDetailsFactory.FightClub().information
     )
 
     fun cast() = DetailsData.Cast(
