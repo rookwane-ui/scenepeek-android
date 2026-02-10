@@ -14,10 +14,10 @@ import androidx.compose.ui.text.font.FontStyle
 import com.divinelink.core.designsystem.component.ScenePeekLazyColumn
 import com.divinelink.core.designsystem.theme.LocalBottomNavigationPadding
 import com.divinelink.core.designsystem.theme.dimensions
-import com.divinelink.core.model.Genre
-import com.divinelink.core.model.details.Person
 import com.divinelink.core.model.details.media.DetailsData
 import com.divinelink.core.model.details.media.MediaDetailsInformation
+import com.divinelink.core.navigation.route.Navigation
+import com.divinelink.core.navigation.route.toPersonRoute
 import com.divinelink.core.ui.TestTags
 import com.divinelink.core.ui.components.details.cast.CreatorsItem
 import com.divinelink.feature.details.media.ui.components.GenresSection
@@ -28,8 +28,7 @@ import com.divinelink.feature.details.media.ui.components.TvInformationSection
 fun AboutFormContent(
   modifier: Modifier = Modifier,
   aboutData: DetailsData.About,
-  onGenreClick: (Genre) -> Unit,
-  onPersonClick: (Person) -> Unit,
+  onNavigate: (Navigation) -> Unit,
 ) {
   ScenePeekLazyColumn(
     modifier = modifier.testTag(TestTags.Details.About.FORM),
@@ -65,7 +64,10 @@ fun AboutFormContent(
 
     aboutData.genres?.let { genres ->
       item {
-        GenresSection(genres, onGenreClick)
+        GenresSection(
+          genres = genres,
+          onGenreClick = {},
+        )
       }
     }
 
@@ -73,7 +75,7 @@ fun AboutFormContent(
       item {
         CreatorsItem(
           creators = creators,
-          onClick = onPersonClick,
+          onClick = { onNavigate(it.toPersonRoute()) },
         )
       }
     }
@@ -96,7 +98,14 @@ fun AboutFormContent(
         CollectionBanner(
           collection = collection,
           onClick = {
-
+            onNavigate(
+              Navigation.CollectionRoute(
+                id = collection.id,
+                name = collection.name,
+                backdropPath = collection.backdropPath,
+                posterPath = collection.posterPath,
+              ),
+            )
           },
         )
       }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -47,8 +48,14 @@ fun CollectionBanner(
         .padding(bottom = MaterialTheme.dimensions.keyline_4)
         .align(Alignment.BottomCenter),
       onClick = onClick,
+      colors = ButtonDefaults.textButtonColors().copy(
+        contentColor = MaterialTheme.colorScheme.onSurface,
+      ),
     ) {
-      Text(stringResource(Res.string.feature_details_view_collection))
+      Text(
+        text = stringResource(Res.string.feature_details_view_collection),
+        style = MaterialTheme.typography.titleSmall,
+      )
     }
   }
 }

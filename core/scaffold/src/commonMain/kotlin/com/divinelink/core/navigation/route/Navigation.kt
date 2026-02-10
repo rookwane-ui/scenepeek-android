@@ -157,4 +157,12 @@ sealed interface Navigation {
 
   @Serializable
   data class MediaListsRoute(val section: MediaListSection) : Navigation
+
+  @Serializable
+  data class CollectionRoute(
+    val id: Int,
+    val name: String,
+    val backdropPath: String?,
+    val posterPath: String?,
+  ) : Navigation
 }

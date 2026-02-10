@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import com.divinelink.core.model.search.SearchEntryPoint
 import com.divinelink.core.navigation.route.Navigation
 import com.divinelink.core.navigation.route.navigateToAddToList
+import com.divinelink.core.navigation.route.navigateToCollection
 import com.divinelink.core.navigation.route.navigateToCreateList
 import com.divinelink.core.navigation.route.navigateToDetails
 import com.divinelink.core.navigation.route.navigateToDiscover
@@ -70,6 +71,7 @@ fun NavController.findNavigation(route: Navigation) {
     is Navigation.MediaListsRoute -> navigateToMediaLists(route)
     is Navigation.SeasonRoute -> navigateToSeason(route)
     is Navigation.EpisodeRoute -> navigateToEpisode(route)
+    is Navigation.CollectionRoute -> navigateToCollection(route)
 
     // This is from top level navigation
     Navigation.HomeRoute -> Unit
