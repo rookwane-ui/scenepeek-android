@@ -16,6 +16,7 @@ object DetailsDataFactory {
       genres = null,
       creators = null,
       information = null,
+      collection = null,
     )
 
     fun cast(isTv: Boolean) = DetailsData.Cast(
@@ -43,6 +44,7 @@ object DetailsDataFactory {
       genres = MediaDetailsFactory.FightClub().genres,
       creators = MediaDetailsFactory.FightClub().creators,
       information = MediaDetailsFactory.FightClub().information,
+      collection = null, //MediaDetailsFactory.FightClub().information
     )
 
     fun cast() = DetailsData.Cast(
@@ -66,6 +68,7 @@ object DetailsDataFactory {
       genres = MediaDetailsFactory.TheOffice().genres,
       creators = MediaDetailsFactory.TheOffice().creators,
       information = MediaDetailsFactory.TheOffice().information,
+      collection = null,
     )
 
     fun cast() = DetailsData.Cast(

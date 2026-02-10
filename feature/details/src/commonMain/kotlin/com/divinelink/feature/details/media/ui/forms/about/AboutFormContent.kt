@@ -91,6 +91,17 @@ fun AboutFormContent(
       }
     }
 
+    aboutData.collection?.let { collection ->
+      item {
+        CollectionBanner(
+          collection = collection,
+          onClick = {
+
+          },
+        )
+      }
+    }
+
     item {
       Spacer(modifier = Modifier.height(LocalBottomNavigationPadding.current))
     }
