@@ -22,9 +22,9 @@ import com.divinelink.core.network.media.model.details.credits.CrewApi
 import com.divinelink.core.network.media.model.details.credits.SeriesCreatorApi
 import com.divinelink.core.network.media.model.details.season.SeasonResponseApi
 import com.divinelink.core.network.media.model.details.tv.NextEpisodeToAirResponse
+import com.divinelink.core.network.media.model.movie.BelongsToCollectionResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonObject
 
 @Serializable(with = DetailsResponseApiSerializer::class)
 sealed class DetailsResponseApi {
@@ -59,7 +59,6 @@ sealed class DetailsResponseApi {
     override val id: Int,
     override val adult: Boolean,
     @SerialName("backdrop_path") override val backdropPath: String?,
-    @SerialName("belongs_to_collection") val belongToCollection: JsonObject? = null,
     val budget: Int,
     override val genres: List<GenreResponse>,
     val homepage: String? = null,
@@ -82,6 +81,7 @@ sealed class DetailsResponseApi {
     @SerialName("vote_count") override val voteCount: Int,
     val credits: CreditsApi? = null, // TODO credits call should be made separately
     val status: String? = null,
+    @SerialName("belongs_to_collection") val collection: BelongsToCollectionResponse?,
   ) : DetailsResponseApi()
 
   @Serializable
@@ -138,6 +138,7 @@ private fun DetailsResponseApi.Movie.toDomainMovie(): MediaDetails = Movie(
   isFavorite = false,
   imdbId = this.imdbId,
   popularity = popularity,
+  collection = collection?.map(),
   information = MediaDetailsInformation.Movie(
     originalTitle = originalTitle,
     status = status ?: "-",

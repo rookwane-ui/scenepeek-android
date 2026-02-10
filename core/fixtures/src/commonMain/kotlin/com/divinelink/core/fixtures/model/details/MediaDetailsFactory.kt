@@ -46,6 +46,7 @@ object MediaDetailsFactory {
     imdbId = "tt0137523",
     tagline = "You don't talk about Fight Club.",
     popularity = 21.6213,
+    collection = null,
     information = MediaDetailsInformation.Movie(
       originalTitle = "Fight Club",
       status = "Released",

@@ -20,6 +20,7 @@ data class Movie(
   val runtime: String?,
   val cast: List<Person>,
   val creators: List<Person>?,
+  val collection: Collection?,
   override val imdbId: String?,
   override val information: MediaDetailsInformation.Movie,
   override val popularity: Double,

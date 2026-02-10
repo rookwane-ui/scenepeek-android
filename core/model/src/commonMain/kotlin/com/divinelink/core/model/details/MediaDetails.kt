@@ -54,6 +54,7 @@ sealed class MediaDetails {
       runtime = runtime,
       imdbId = imdbId,
       popularity = popularity,
+      collection = collection,
       information = information,
     )
     is TV -> TV(
