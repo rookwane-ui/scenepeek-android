@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.divinelink.core.data.details.repository.DetailsRepository
+import com.divinelink.core.model.media.MediaItem
 import com.divinelink.core.navigation.route.Navigation
 import com.divinelink.core.ui.blankslate.BlankSlateState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,7 +57,10 @@ class CollectionsViewModel(
                 loading = false,
                 error = null,
                 overview = details.overview,
-                movies = details.movies.sortedBy { it.releaseDate },
+                movies = details.movies.sortedWith(
+                  compareBy<MediaItem.Media.Movie> { it.releaseDate.isBlank() }
+                    .thenBy { it.releaseDate.ifBlank { it.name } },
+                ),
               )
             }
           },
@@ -64,7 +68,7 @@ class CollectionsViewModel(
             _uiState.update { uiState ->
               uiState.copy(
                 loading = false,
-                error = BlankSlateState.Generic,
+                error = BlankSlateState.Contact,
               )
             }
           },

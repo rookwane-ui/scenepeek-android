@@ -1,5 +1,6 @@
 package com.divinelink.core.ui.components.details
 
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,6 +27,7 @@ fun CollectionBackdropImage(
   AsyncImage(
     modifier = modifier
       .alpha(0.5f)
+      .aspectRatio(16f / 9f)
       .fillMaxWidth(),
     model = ImageRequest.Builder(platformContext())
       .memoryCachePolicy(CachePolicy.ENABLED)

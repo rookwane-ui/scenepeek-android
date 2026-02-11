@@ -81,7 +81,7 @@
   <string name="feature_details_information_next_episode_air_date">Next episode air date</string>
   <string name="feature_details_information_seasons">Seasons</string>
 
-  <string name="feature_details_part_of_collection">Part of %1$s</string>
+  <string name="feature_details_part_of_collection">Part of the %1$s</string>
   <string name="feature_details_view_collection">View the collection</string>
 
   <plurals name="feature_details_information_countries">
