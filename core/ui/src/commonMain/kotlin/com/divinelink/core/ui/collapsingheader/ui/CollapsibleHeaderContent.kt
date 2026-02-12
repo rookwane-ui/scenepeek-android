@@ -79,6 +79,7 @@ fun SharedTransitionScope.CollapsibleHeaderContent(
         if (posterPath != null) {
           PosterImage(
             modifier = Modifier
+              .align(Alignment.Top)
               .sharedElement(
                 sharedContentState = rememberSharedContentState(
                   SharedElementKeys.MediaPoster(posterPath),

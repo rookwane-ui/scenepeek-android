@@ -10,6 +10,7 @@ import com.divinelink.core.network.client.TMDbClient
 import com.divinelink.core.network.media.model.GenresListResponse
 import com.divinelink.core.network.media.model.MediaRequestApi
 import com.divinelink.core.network.media.model.credits.AggregateCreditsApi
+import com.divinelink.core.network.media.model.details.CollectionDetailsResponse
 import com.divinelink.core.network.media.model.details.DetailsResponseApi
 import com.divinelink.core.network.media.model.details.reviews.ReviewsResponseApi
 import com.divinelink.core.network.media.model.details.season.SeasonDetailsResponse
@@ -28,6 +29,7 @@ import com.divinelink.core.network.media.model.search.multi.MultiSearchResponseA
 import com.divinelink.core.network.media.model.states.AccountMediaDetailsRequestApi
 import com.divinelink.core.network.media.model.states.AccountMediaDetailsResponseApi
 import com.divinelink.core.network.media.model.tv.TvResponseApi
+import com.divinelink.core.network.media.util.buildCollectionsUrl
 import com.divinelink.core.network.media.util.buildDiscoverUrl
 import com.divinelink.core.network.media.util.buildFetchDetailsUrl
 import com.divinelink.core.network.media.util.buildFetchMediaListUrl
@@ -271,4 +273,9 @@ class ProdMediaService(
       ),
     )
   }
+
+  override suspend fun fetchCollectionDetails(id: Int): Result<CollectionDetailsResponse> =
+    runCatching {
+      restClient.get<CollectionDetailsResponse>(url = buildCollectionsUrl(id = id))
+    }
 }

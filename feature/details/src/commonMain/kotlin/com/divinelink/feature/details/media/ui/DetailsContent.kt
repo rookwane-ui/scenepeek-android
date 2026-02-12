@@ -461,8 +461,7 @@ private fun SharedTransitionScope.MediaDetailsContent(
               is DetailsData.About -> AboutFormContent(
                 modifier = Modifier.fillMaxSize(),
                 aboutData = form.data as DetailsData.About,
-                onPersonClick = onPersonClick,
-                onGenreClick = {},
+                onNavigate = onNavigate,
               )
               is DetailsData.Cast -> CastFormContent(
                 modifier = Modifier.fillMaxSize(),

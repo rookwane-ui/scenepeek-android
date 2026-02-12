@@ -17,9 +17,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -38,10 +40,11 @@ private const val MINIMUM_MAX_LINES = 6
 fun SimpleExpandingText(
   modifier: Modifier = Modifier,
   text: AnnotatedString,
+  style: TextStyle,
 ) {
-  var isExpanded by remember { mutableStateOf(false) }
-  var hasOverflow by remember { mutableStateOf(false) }
-  var maxLines by remember { mutableIntStateOf(MINIMUM_MAX_LINES) }
+  var isExpanded by rememberSaveable { mutableStateOf(false) }
+  var hasOverflow by rememberSaveable { mutableStateOf(false) }
+  var maxLines by rememberSaveable { mutableIntStateOf(MINIMUM_MAX_LINES) }
 
   Column(
     modifier = modifier
@@ -78,7 +81,7 @@ fun SimpleExpandingText(
         },
         overflow = TextOverflow.Ellipsis,
         text = text,
-        style = MaterialTheme.typography.bodyMedium,
+        style = style,
         maxLines = maxLines,
       )
       if (hasOverflow) {
@@ -111,6 +114,7 @@ fun SimpleExpandingTextPreview() {
     Surface {
       SimpleExpandingText(
         modifier = Modifier.padding(top = 120.dp),
+        style = MaterialTheme.typography.bodyMedium,
         text = buildAnnotatedString {
           append("Lorem ipsum dolor sit amet, consectetur adipiscing elit. ")
           append("Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. ")

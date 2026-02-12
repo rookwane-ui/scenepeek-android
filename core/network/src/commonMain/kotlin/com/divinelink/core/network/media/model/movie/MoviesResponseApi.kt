@@ -40,7 +40,7 @@ fun MoviesResponseApi.map(): PaginationData<MediaItem.Media> = PaginationData(
   list = this.results.map(MovieResponseApi::toMovie),
 )
 
-private fun MovieResponseApi.toMovie() = MediaItem.Media.Movie(
+fun MovieResponseApi.toMovie() = MediaItem.Media.Movie(
   id = this.id,
   posterPath = this.posterPath ?: "",
   releaseDate = this.releaseDate,

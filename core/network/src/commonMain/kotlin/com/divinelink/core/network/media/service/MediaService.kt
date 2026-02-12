@@ -7,6 +7,7 @@ import com.divinelink.core.model.sort.SortOption
 import com.divinelink.core.network.media.model.GenresListResponse
 import com.divinelink.core.network.media.model.MediaRequestApi
 import com.divinelink.core.network.media.model.credits.AggregateCreditsApi
+import com.divinelink.core.network.media.model.details.CollectionDetailsResponse
 import com.divinelink.core.network.media.model.details.DetailsResponseApi
 import com.divinelink.core.network.media.model.details.reviews.ReviewsResponseApi
 import com.divinelink.core.network.media.model.details.season.SeasonDetailsResponse
@@ -83,4 +84,6 @@ interface MediaService {
     showId: Int,
     season: Int,
   ): Result<SeasonDetailsResponse>
+
+  suspend fun fetchCollectionDetails(id: Int): Result<CollectionDetailsResponse>
 }

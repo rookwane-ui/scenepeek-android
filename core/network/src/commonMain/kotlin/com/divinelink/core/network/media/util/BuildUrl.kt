@@ -148,3 +148,13 @@ fun buildSeasonDetailsUrl(
     }
   }
 }.toString()
+
+fun buildCollectionsUrl(id: Int): String = buildUrl {
+  protocol = URLProtocol.HTTPS
+  host = Routes.TMDb.HOST
+  encodedPath = Routes.TMDb.V3 + "/collection/$id"
+
+  parameters.apply {
+    append("language", "en")
+  }
+}.toString()

@@ -3,6 +3,7 @@ package com.divinelink.core.data.details.repository
 import com.divinelink.core.model.PaginationData
 import com.divinelink.core.model.account.AccountMediaDetails
 import com.divinelink.core.model.credits.AggregateCredits
+import com.divinelink.core.model.details.CollectionDetails
 import com.divinelink.core.model.details.MediaDetails
 import com.divinelink.core.model.details.rating.ExternalRatings
 import com.divinelink.core.model.details.rating.RatingDetails
@@ -60,4 +61,6 @@ interface DetailsRepository {
   ): Flow<Result<RatingDetails>>
 
   fun findById(id: String): Flow<Result<MediaItem>>
+
+  suspend fun fetchCollectionDetails(id: Int): Result<CollectionDetails>
 }

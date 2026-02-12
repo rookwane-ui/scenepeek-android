@@ -7,6 +7,7 @@ import com.divinelink.core.navigation.route.Navigation.JellyseerrSettingsRoute
 import com.divinelink.core.scaffold.NavGraphExtension
 import com.divinelink.feature.add.to.account.list.navigation.addToListScreen
 import com.divinelink.feature.add.to.account.modal.navigation.defaultMediaActionMenu
+import com.divinelink.feature.collections.ui.navigation.collectionsScreen
 import com.divinelink.feature.credits.navigation.creditsScreen
 import com.divinelink.feature.details.navigation.detailsScreen
 import com.divinelink.feature.details.navigation.personScreen
@@ -301,6 +302,14 @@ val navigationModule = module {
   single<NavGraphExtension>(named<Navigation.EpisodeRoute>()) {
     { navController, _ ->
       episodeScreen(
+        onNavigate = navController::findNavigation,
+      )
+    }
+  }
+
+  single<NavGraphExtension>(named<Navigation.CollectionRoute>()) {
+    { navController, _ ->
+      collectionsScreen(
         onNavigate = navController::findNavigation,
       )
     }

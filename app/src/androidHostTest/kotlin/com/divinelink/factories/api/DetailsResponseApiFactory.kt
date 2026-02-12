@@ -13,7 +13,7 @@ object DetailsResponseApiFactory {
   fun Movie() = DetailsResponseApi.Movie(
     adult = false,
     backdropPath = "/xRyINp9KfMLVjRiO5nCsoRDdvvF.jpg",
-    belongToCollection = null,
+    collection = null,
     budget = 63000000,
     genres = listOf(
       GenreResponseFactory.Movie.thriller,

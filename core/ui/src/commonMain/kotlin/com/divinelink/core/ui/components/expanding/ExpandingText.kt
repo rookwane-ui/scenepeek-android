@@ -16,10 +16,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import com.divinelink.core.designsystem.theme.AppTheme
 import com.divinelink.core.ui.Previews
 import com.divinelink.core.ui.UiString
@@ -36,8 +38,8 @@ fun ExpandingText(
   expandComponent: @Composable BoxScope.(Modifier) -> Unit = {},
   shrinkComponent: @Composable ColumnScope.(Modifier, () -> Unit) -> Unit = { _, _ -> },
 ) {
-  val showMore = remember { mutableStateOf(false) }
-  val hasOverflow = remember { mutableStateOf(false) }
+  val showMore = rememberSaveable { mutableStateOf(false) }
+  val hasOverflow = rememberSaveable { mutableStateOf(false) }
 
   Column(
     modifier = modifier.clickable(
@@ -86,8 +88,7 @@ private fun ExpandingTextPreview() {
     Surface {
       Column {
         ExpandingText(
-//          text = LoremIpsum(50).values.joinToString(),
-          text = "LoremIpsum(50).values.joinToString()",
+          text = LoremIpsum(50).values.joinToString(),
           style = MaterialTheme.typography.bodyMedium,
           expandComponent = { modifier ->
             ExpandingComponents.InlineEdgeFadingEffect(
@@ -111,8 +112,7 @@ private fun ExpandingTextNoOverflowPreview() {
     Surface {
       Column {
         ExpandingText(
-//          text = LoremIpsum(20).values.joinToString(),
-          text = "LoremIpsum(20).values.joinToString()",
+          text = LoremIpsum(20).values.joinToString(),
           style = MaterialTheme.typography.bodyMedium,
           expandComponent = { modifier ->
             ExpandingComponents.InlineEdgeFadingEffect(

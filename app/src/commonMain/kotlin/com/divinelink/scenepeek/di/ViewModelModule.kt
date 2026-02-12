@@ -3,6 +3,7 @@ package com.divinelink.scenepeek.di
 import com.divinelink.core.domain.components.SwitchViewButtonViewModel
 import com.divinelink.feature.add.to.account.list.AddToListViewModel
 import com.divinelink.feature.add.to.account.modal.ActionMenuViewModel
+import com.divinelink.feature.collections.CollectionsViewModel
 import com.divinelink.feature.credits.ui.CreditsViewModel
 import com.divinelink.feature.details.media.ui.DetailsViewModel
 import com.divinelink.feature.details.person.ui.PersonViewModel
@@ -34,6 +35,7 @@ import org.koin.dsl.module
 val appViewModelModule = module {
   viewModelOf(::AccountSettingsViewModel)
   viewModelOf(::AppearanceSettingsViewModel)
+  viewModelOf(::CollectionsViewModel)
   viewModelOf(::CreditsViewModel)
   viewModelOf(::DetailsViewModel)
   viewModelOf(::HomeViewModel)

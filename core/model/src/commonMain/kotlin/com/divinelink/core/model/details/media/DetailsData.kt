@@ -1,6 +1,7 @@
 package com.divinelink.core.model.details.media
 
 import com.divinelink.core.model.Genre
+import com.divinelink.core.model.details.Collection
 import com.divinelink.core.model.details.Person
 import com.divinelink.core.model.details.Season
 import com.divinelink.core.model.details.review.Review
@@ -13,6 +14,7 @@ sealed interface DetailsData {
     val genres: List<Genre>?,
     val creators: List<Person>?,
     val information: MediaDetailsInformation?,
+    val collection: Collection?,
   ) : DetailsData
 
   data class Cast(

@@ -36,6 +36,7 @@ include(":core:testing")
 include(":core:fixtures")
 
 include(":feature:add-to-account")
+include(":feature:collections")
 include(":feature:credits")
 include(":feature:details")
 include(":feature:season")

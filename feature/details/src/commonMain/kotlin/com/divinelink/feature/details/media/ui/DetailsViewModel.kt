@@ -800,6 +800,7 @@ class DetailsViewModel(
         is Movie -> (result.mediaDetails as Movie).creators
       },
       information = result.mediaDetails.information,
+      collection = (result.mediaDetails as? Movie)?.collection,
     )
 
   /**
