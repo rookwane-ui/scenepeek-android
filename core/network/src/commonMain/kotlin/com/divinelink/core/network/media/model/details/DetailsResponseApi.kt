@@ -54,6 +54,8 @@ sealed class DetailsResponseApi {
   @SerialName("production_countries")
   abstract val countries: List<ProductionCountryResponse>
 
+  abstract val keywords: KeywordsResponse?
+
   @Serializable
   data class Movie(
     override val id: Int,
@@ -82,6 +84,7 @@ sealed class DetailsResponseApi {
     val credits: CreditsApi? = null, // TODO credits call should be made separately
     val status: String? = null,
     @SerialName("belongs_to_collection") val collection: BelongsToCollectionResponse?,
+    override val keywords: KeywordsResponse?,
   ) : DetailsResponseApi()
 
   @Serializable
@@ -111,6 +114,7 @@ sealed class DetailsResponseApi {
     @SerialName("next_episode_to_air") val nextEpisodeToAir: NextEpisodeToAirResponse? = null,
     @SerialName("production_companies") override val companies: List<ProductionCompany>,
     @SerialName("production_countries") override val countries: List<ProductionCountryResponse>,
+    override val keywords: KeywordsResponse?,
   ) : DetailsResponseApi()
 }
 
@@ -159,6 +163,7 @@ private fun DetailsResponseApi.Movie.toDomainMovie(): MediaDetails = Movie(
       "$${revenue.formatWithCommas()}"
     },
   ),
+  keywords = keywords.map(),
 )
 
 private fun DetailsResponseApi.TV.toDomainTVShow(): MediaDetails = TV(
@@ -194,6 +199,7 @@ private fun DetailsResponseApi.TV.toDomainTVShow(): MediaDetails = TV(
       Country.fromCode(it.iso31611)
     },
   ),
+  keywords = keywords.map(),
 )
 
 private fun List<CastApi>.toActors(): List<Person> = this.map(CastApi::toPerson)

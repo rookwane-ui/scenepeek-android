@@ -198,7 +198,7 @@ class ProdDetailsRepositoryTest {
           request = MediaRequestApiFactory.tv(),
         ).test {
           assertThat(awaitItem()).isEqualTo(
-            Result.success(MediaDetailsFactory.TheOffice()),
+            Result.success(MediaDetailsFactory.TheOffice().copy(keywords = null)),
           )
           awaitComplete()
         }

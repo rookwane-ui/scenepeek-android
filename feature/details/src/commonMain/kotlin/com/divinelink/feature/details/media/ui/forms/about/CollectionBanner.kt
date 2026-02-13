@@ -26,11 +26,12 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CollectionBanner(
+  modifier: Modifier = Modifier,
   collection: Collection,
   onClick: () -> Unit,
 ) {
   Box(
-    modifier = Modifier
+    modifier = modifier
       .clip(MaterialTheme.shapes.medium)
       .clickable(onClick = onClick)
       .fillMaxWidth(),

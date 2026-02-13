@@ -25,4 +25,5 @@ data class Movie(
   override val information: MediaDetailsInformation.Movie,
   override val popularity: Double,
   override val isFavorite: Boolean,
+  override val keywords: List<Keyword>?,
 ) : MediaDetails()

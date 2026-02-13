@@ -3,6 +3,7 @@ package com.divinelink.core.fixtures.details.media
 import com.divinelink.core.fixtures.details.credits.SeriesCastFactory
 import com.divinelink.core.fixtures.details.review.ReviewFactory
 import com.divinelink.core.fixtures.details.season.SeasonFactory
+import com.divinelink.core.fixtures.model.details.KeywordFactory
 import com.divinelink.core.fixtures.model.details.MediaDetailsFactory
 import com.divinelink.core.fixtures.model.media.MediaItemFactory
 import com.divinelink.core.model.details.media.DetailsData
@@ -17,6 +18,7 @@ object DetailsDataFactory {
       creators = null,
       information = null,
       collection = null,
+      keywords = null,
     )
 
     fun cast(isTv: Boolean) = DetailsData.Cast(
@@ -44,7 +46,8 @@ object DetailsDataFactory {
       genres = MediaDetailsFactory.FightClub().genres,
       creators = MediaDetailsFactory.FightClub().creators,
       information = MediaDetailsFactory.FightClub().information,
-      collection = null, // MediaDetailsFactory.FightClub().information
+      collection = null,
+      keywords = KeywordFactory.fightClub,
     )
 
     fun cast() = DetailsData.Cast(
@@ -69,6 +72,7 @@ object DetailsDataFactory {
       creators = MediaDetailsFactory.TheOffice().creators,
       information = MediaDetailsFactory.TheOffice().information,
       collection = null,
+      keywords = KeywordFactory.theOffice,
     )
 
     fun cast() = DetailsData.Cast(

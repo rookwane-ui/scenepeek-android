@@ -17,10 +17,11 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun GenresSection(
+  modifier: Modifier = Modifier,
   genres: List<Genre>,
   onGenreClick: (Genre) -> Unit,
 ) {
-  Column {
+  Column(modifier = modifier) {
     Text(
       modifier = Modifier.padding(bottom = MaterialTheme.dimensions.keyline_8),
       text = stringResource(Res.string.feature_details_genres),

@@ -66,6 +66,7 @@ object MediaDetailsFactory {
         Country.UNITED_STATES,
       ),
     ),
+    keywords = KeywordFactory.fightClub,
   )
 
   fun TheOffice() = TV(
@@ -130,5 +131,6 @@ object MediaDetailsFactory {
       ),
       nextEpisodeAirDate = null,
     ),
+    keywords = KeywordFactory.theOffice,
   )
 }

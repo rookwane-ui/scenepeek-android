@@ -21,6 +21,7 @@ data class TV(
   override val tagline: String?,
   override val popularity: Double,
   override val information: MediaDetailsInformation.TV,
+  override val keywords: List<Keyword>?,
   val creators: List<Person>?,
   val seasons: List<Season>,
   val numberOfSeasons: Int,

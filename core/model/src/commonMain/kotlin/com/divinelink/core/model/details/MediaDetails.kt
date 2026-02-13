@@ -24,6 +24,7 @@ sealed class MediaDetails {
   abstract val imdbId: String?
   abstract val popularity: Double
   abstract val information: MediaDetailsInformation
+  abstract val keywords: List<Keyword>?
 
   fun copy(
     id: Int = this.id,
@@ -56,6 +57,7 @@ sealed class MediaDetails {
       popularity = popularity,
       collection = collection,
       information = information,
+      keywords = keywords,
     )
     is TV -> TV(
       id = id,
@@ -74,6 +76,7 @@ sealed class MediaDetails {
       imdbId = imdbId,
       popularity = popularity,
       information = information,
+      keywords = keywords,
     )
   }
 }
