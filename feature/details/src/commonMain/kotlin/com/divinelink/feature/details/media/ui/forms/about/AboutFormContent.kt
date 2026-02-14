@@ -75,7 +75,6 @@ fun AboutFormContent(
               Navigation.DiscoverRoute(
                 mediaType = aboutData.mediaType.value,
                 encodedGenre = it.encodeToString(),
-                encodedKeyword = null,
               ),
             )
           },
@@ -134,16 +133,25 @@ fun AboutFormContent(
     }
 
     aboutData.keywords?.let { keywords ->
-      item {
-        HorizontalDivider(
-          modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.keyline_16),
-        )
-      }
-      item {
-        KeywordsSection(
-          keywords = keywords,
-          onClick = {},
-        )
+      if (keywords.isNotEmpty()) {
+        item {
+          HorizontalDivider(
+            modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.keyline_16),
+          )
+        }
+        item {
+          KeywordsSection(
+            keywords = keywords,
+            onClick = {
+              onNavigate(
+                Navigation.DiscoverRoute(
+                  mediaType = aboutData.mediaType.value,
+                  encodedKeyword = it.encodeToString(),
+                ),
+              )
+            },
+          )
+        }
       }
     }
 

@@ -26,6 +26,9 @@ class DiscoverMediaUseCase(
         voteAverage?.let { add(voteAverage) }
         year?.let { add(year) }
         add(DiscoverFilter.MinimumVotes(votes ?: 10))
+        if (keywords.isNotEmpty()) {
+          add(DiscoverFilter.Keywords(keywords.map { it.id }))
+        }
       }
     }.mapNotNull { it }
 

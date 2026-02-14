@@ -92,6 +92,9 @@ fun buildDiscoverUrl(
           append("primary_release_date.gte", filter.startDateTime)
           append("primary_release_date.lte", filter.endDateTime)
         }
+        is DiscoverFilter.Keywords -> if (filter.ids.isNotEmpty()) {
+          append("with_keywords", filter.ids.joinToString(","))
+        }
       }
     }
   }

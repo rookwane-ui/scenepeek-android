@@ -11,6 +11,8 @@ sealed interface DiscoverFilter {
 
   data class MinimumVotes(val votes: Int) : DiscoverFilter
 
+  data class Keywords(val ids: List<Long>) : DiscoverFilter
+
   sealed interface Year : DiscoverFilter {
     data class Single(val year: Int) : Year
 

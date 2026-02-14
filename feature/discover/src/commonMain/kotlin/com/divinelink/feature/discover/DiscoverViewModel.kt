@@ -8,6 +8,7 @@ import com.divinelink.core.data.FilterRepository
 import com.divinelink.core.data.preferences.PreferencesRepository
 import com.divinelink.core.domain.DiscoverMediaUseCase
 import com.divinelink.core.model.Genre
+import com.divinelink.core.model.details.Keyword
 import com.divinelink.core.model.discover.DiscoverParameters
 import com.divinelink.core.model.discover.MediaTypeFilters
 import com.divinelink.core.model.exception.AppException
@@ -24,6 +25,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class DiscoverViewModel(
   private val filterRepository: FilterRepository,
@@ -44,19 +46,27 @@ class DiscoverViewModel(
   val uiState: StateFlow<DiscoverUiState> = _uiState
 
   init {
-    filterRepository.clear(_uiState.value.selectedMedia)
+    viewModelScope.launch {
+      filterRepository.clear(_uiState.value.selectedMedia)
 
-    val mediaType = MediaType.from(route.mediaType)
-    val genre = route.encodedGenre?.decodeFromString<Genre>()
+      val mediaType = MediaType.from(route.mediaType)
+      val genre = route.encodedGenre?.decodeFromString<Genre>()
+      val keyword = route.encodedKeyword?.decodeFromString<Keyword>()
 
-    filterRepository.updateSelectedGenres(
-      mediaType = mediaType,
-      genres = if (genre != null) {
-        listOf(genre)
-      } else {
-        emptyList()
-      },
-    )
+      genre?.let { genre ->
+        filterRepository.updateSelectedGenres(
+          mediaType = mediaType,
+          genres = listOf(genre),
+        )
+      }
+
+      keyword?.let { keyword ->
+        filterRepository.updateKeyword(
+          mediaType = mediaType,
+          keyword = keyword,
+        )
+      }
+    }
 
     preferencesRepository
       .uiPreferences
@@ -161,6 +171,21 @@ class DiscoverViewModel(
             filters = uiState.filters.updateFilters(
               mediaType = uiState.selectedTab.mediaType,
               update = { it.copy(year = filter) },
+            ),
+          )
+        }
+      }
+      .launchIn(viewModelScope)
+
+    filterRepository
+      .keywords
+      .map { it[uiState.value.selectedMedia] ?: emptyList() }
+      .onEach { keywords ->
+        _uiState.update { uiState ->
+          uiState.copy(
+            filters = uiState.filters.updateFilters(
+              mediaType = uiState.selectedTab.mediaType,
+              update = { it.copy(keywords = keywords) },
             ),
           )
         }

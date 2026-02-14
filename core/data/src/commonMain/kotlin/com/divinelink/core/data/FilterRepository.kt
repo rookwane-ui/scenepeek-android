@@ -1,6 +1,7 @@
 package com.divinelink.core.data
 
 import com.divinelink.core.model.Genre
+import com.divinelink.core.model.details.Keyword
 import com.divinelink.core.model.discover.DiscoverFilter
 import com.divinelink.core.model.locale.Country
 import com.divinelink.core.model.locale.Language
@@ -59,6 +60,14 @@ class FilterRepository {
   )
   val year: StateFlow<Map<MediaType, DiscoverFilter.Year?>> = _year.asStateFlow()
 
+  private val _keywords = MutableStateFlow<Map<MediaType, List<Keyword>>>(
+    mapOf(
+      MediaType.MOVIE to emptyList(),
+      MediaType.TV to emptyList(),
+    ),
+  )
+  val keywords: StateFlow<Map<MediaType, List<Keyword>>> = _keywords.asStateFlow()
+
   fun updateSelectedGenres(
     mediaType: MediaType,
     genres: List<Genre>,
@@ -101,6 +110,21 @@ class FilterRepository {
     _year.value += mediaType to year
   }
 
+  fun updateKeyword(
+    mediaType: MediaType,
+    keyword: Keyword,
+  ) {
+    val currentKeywords = _keywords.value[mediaType] ?: emptyList()
+
+    val keywords = if (keyword in currentKeywords) {
+      currentKeywords - keyword
+    } else {
+      currentKeywords + keyword
+    }
+
+    _keywords.value += mediaType to keywords
+  }
+
   fun clearRatings(mediaType: MediaType) {
     _voteAverage.value += mediaType to null
     _minimumVotes.value += mediaType to null
@@ -108,6 +132,7 @@ class FilterRepository {
 
   fun clear(mediaType: MediaType) {
     _selectedGenres.value += mediaType to emptyList()
+    _keywords.value += mediaType to emptyList()
     _selectedLanguage.value += mediaType to null
     _selectedCountry.value += mediaType to null
     _voteAverage.value += mediaType to null

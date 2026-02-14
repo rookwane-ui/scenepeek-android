@@ -150,8 +150,8 @@ sealed interface Navigation {
   @Serializable
   data class DiscoverRoute(
     val mediaType: String?,
-    val encodedGenre: String?,
-    val encodedKeyword: String?,
+    val encodedGenre: String? = null,
+    val encodedKeyword: String? = null,
   ) : Navigation
 
   @Serializable
