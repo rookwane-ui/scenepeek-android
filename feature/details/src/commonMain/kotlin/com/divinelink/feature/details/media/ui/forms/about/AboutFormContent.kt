@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,6 +22,7 @@ import com.divinelink.core.navigation.route.toPersonRoute
 import com.divinelink.core.ui.TestTags
 import com.divinelink.core.ui.components.details.cast.CreatorsItem
 import com.divinelink.feature.details.media.ui.components.GenresSection
+import com.divinelink.feature.details.media.ui.components.KeywordsSection
 import com.divinelink.feature.details.media.ui.components.MovieInformationSection
 import com.divinelink.feature.details.media.ui.components.TvInformationSection
 
@@ -32,16 +34,13 @@ fun AboutFormContent(
 ) {
   ScenePeekLazyColumn(
     modifier = modifier.testTag(TestTags.Details.About.FORM),
-    contentPadding = PaddingValues(
-      top = MaterialTheme.dimensions.keyline_16,
-      start = MaterialTheme.dimensions.keyline_16,
-      end = MaterialTheme.dimensions.keyline_16,
-    ),
+    contentPadding = PaddingValues(top = MaterialTheme.dimensions.keyline_16),
     verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.keyline_16),
   ) {
     aboutData.tagline?.let {
       item {
         Text(
+          modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.keyline_16),
           text = it,
           style = MaterialTheme.typography.bodySmall,
           fontStyle = FontStyle.Italic,
@@ -53,18 +52,22 @@ fun AboutFormContent(
     if (!aboutData.overview.isNullOrEmpty()) {
       item {
         Text(
+          modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.keyline_16),
           text = aboutData.overview!!,
           style = MaterialTheme.typography.bodyMedium,
         )
       }
       item {
-        HorizontalDivider()
+        HorizontalDivider(
+          modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.keyline_16),
+        )
       }
     }
 
     aboutData.genres?.let { genres ->
       item {
         GenresSection(
+          modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.keyline_16),
           genres = genres,
           onGenreClick = {},
         )
@@ -74,6 +77,7 @@ fun AboutFormContent(
     aboutData.creators?.let { creators ->
       item {
         CreatorsItem(
+          modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.keyline_16),
           creators = creators,
           onClick = { onNavigate(it.toPersonRoute()) },
         )
@@ -82,13 +86,21 @@ fun AboutFormContent(
 
     aboutData.information?.let { information ->
       item {
-        HorizontalDivider()
+        HorizontalDivider(
+          modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.keyline_16),
+        )
       }
 
       item {
         when (information) {
-          is MediaDetailsInformation.Movie -> MovieInformationSection(information)
-          is MediaDetailsInformation.TV -> TvInformationSection(information)
+          is MediaDetailsInformation.Movie -> MovieInformationSection(
+            modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.keyline_16),
+            information = information,
+          )
+          is MediaDetailsInformation.TV -> TvInformationSection(
+            modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.keyline_16),
+            information = information,
+          )
         }
       }
     }
@@ -96,6 +108,7 @@ fun AboutFormContent(
     aboutData.collection?.let { collection ->
       item {
         CollectionBanner(
+          modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.keyline_16),
           collection = collection,
           onClick = {
             onNavigate(
@@ -107,6 +120,20 @@ fun AboutFormContent(
               ),
             )
           },
+        )
+      }
+    }
+
+    aboutData.keywords?.let { keywords ->
+      item {
+        HorizontalDivider(
+          modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.keyline_16),
+        )
+      }
+      item {
+        KeywordsSection(
+          keywords = keywords,
+          onClick = {},
         )
       }
     }

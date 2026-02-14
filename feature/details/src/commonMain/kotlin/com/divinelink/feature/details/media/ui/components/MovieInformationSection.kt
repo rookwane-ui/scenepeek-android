@@ -28,9 +28,12 @@ import org.jetbrains.compose.resources.pluralStringResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun MovieInformationSection(information: MediaDetailsInformation.Movie) {
+fun MovieInformationSection(
+  modifier: Modifier = Modifier,
+  information: MediaDetailsInformation.Movie,
+) {
   Column(
-    modifier = Modifier.fillMaxWidth(),
+    modifier = modifier.fillMaxWidth(),
     verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.keyline_16),
   ) {
     Text(

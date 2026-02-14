@@ -26,9 +26,12 @@ import com.divinelink.feature.details.resources.feature_details_information_stat
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun TvInformationSection(information: MediaDetailsInformation.TV) {
+fun TvInformationSection(
+  modifier: Modifier = Modifier,
+  information: MediaDetailsInformation.TV,
+) {
   Column(
-    modifier = Modifier.fillMaxWidth(),
+    modifier = modifier.fillMaxWidth(),
     verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.keyline_16),
   ) {
     Text(

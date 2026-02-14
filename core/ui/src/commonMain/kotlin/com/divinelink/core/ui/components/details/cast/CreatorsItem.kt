@@ -24,11 +24,12 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun CreatorsItem(
+  modifier: Modifier = Modifier,
   creators: List<Person>,
   onClick: (Person) -> Unit,
 ) {
   FlowRow(
-    modifier = Modifier.offset(x = -MaterialTheme.dimensions.keyline_12),
+    modifier = modifier.offset(x = -MaterialTheme.dimensions.keyline_12),
   ) {
     creators.forEach { person ->
       CreatorItem(

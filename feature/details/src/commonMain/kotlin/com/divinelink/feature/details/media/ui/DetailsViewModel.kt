@@ -801,6 +801,7 @@ class DetailsViewModel(
       },
       information = result.mediaDetails.information,
       collection = (result.mediaDetails as? Movie)?.collection,
+      keywords = result.mediaDetails.keywords,
     )
 
   /**

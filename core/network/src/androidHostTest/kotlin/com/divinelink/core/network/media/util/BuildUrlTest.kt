@@ -15,8 +15,9 @@ class BuildUrlTest {
       appendToResponse = true,
     )
 
-    url shouldBe
-      "https://api.themoviedb.org/3/tv/1234?language=en-US&append_to_response=external_ids"
+    url shouldBe "https://api.themoviedb.org/3/tv/1234" +
+      "?language=en-US" +
+      "&append_to_response=external_ids%2Ckeywords"
   }
 
   @Test
@@ -38,7 +39,9 @@ class BuildUrlTest {
       appendToResponse = true,
     )
 
-    url shouldBe "https://api.themoviedb.org/3/movie/1234?language=en-US&append_to_response=credits"
+    url shouldBe "https://api.themoviedb.org/3/movie/1234" +
+      "?language=en-US" +
+      "&append_to_response=credits%2Ckeywords"
   }
 
   @Test
