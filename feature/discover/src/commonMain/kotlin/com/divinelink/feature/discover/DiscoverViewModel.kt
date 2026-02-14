@@ -1,10 +1,13 @@
 package com.divinelink.feature.discover
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.divinelink.core.commons.util.decodeFromString
 import com.divinelink.core.data.FilterRepository
 import com.divinelink.core.data.preferences.PreferencesRepository
 import com.divinelink.core.domain.DiscoverMediaUseCase
+import com.divinelink.core.model.Genre
 import com.divinelink.core.model.discover.DiscoverParameters
 import com.divinelink.core.model.discover.MediaTypeFilters
 import com.divinelink.core.model.exception.AppException
@@ -12,6 +15,7 @@ import com.divinelink.core.model.media.MediaType
 import com.divinelink.core.model.sort.SortOption
 import com.divinelink.core.model.ui.ViewableSection
 import com.divinelink.core.model.user.data.UserDataResponse
+import com.divinelink.core.navigation.route.Navigation
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -25,15 +29,34 @@ class DiscoverViewModel(
   private val filterRepository: FilterRepository,
   private val discoverUseCase: DiscoverMediaUseCase,
   preferencesRepository: PreferencesRepository,
+  savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
+  private val route = Navigation.DiscoverRoute(
+    mediaType = savedStateHandle.get<String>("mediaType"),
+    encodedGenre = savedStateHandle.get<String>("encodedGenre"),
+    encodedKeyword = savedStateHandle.get<String>("encodedKeyword"),
+  )
+
   private val _uiState: MutableStateFlow<DiscoverUiState> = MutableStateFlow(
-    DiscoverUiState.initial,
+    DiscoverUiState.initial(route),
   )
   val uiState: StateFlow<DiscoverUiState> = _uiState
 
   init {
     filterRepository.clear(_uiState.value.selectedMedia)
+
+    val mediaType = MediaType.from(route.mediaType)
+    val genre = route.encodedGenre?.decodeFromString<Genre>()
+
+    filterRepository.updateSelectedGenres(
+      mediaType = mediaType,
+      genres = if (genre != null) {
+        listOf(genre)
+      } else {
+        emptyList()
+      },
+    )
 
     preferencesRepository
       .uiPreferences

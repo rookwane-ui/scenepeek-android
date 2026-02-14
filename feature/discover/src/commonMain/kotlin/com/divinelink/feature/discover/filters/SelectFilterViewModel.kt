@@ -173,22 +173,26 @@ class SelectFilterViewModel(
             )
           }
           is Resource.Loading -> _uiState.update { uiState ->
+            val selected = (uiState.filterType as? FilterType.Searchable.Genres)?.selectedOptions
+
             uiState.copy(
               loading = false,
               filterType = FilterType.Searchable.Genres(
                 options = result.data ?: emptyList(),
-                selectedOptions = emptyList(),
+                selectedOptions = selected ?: emptyList(),
                 query = null,
               ),
               error = null,
             )
           }
           is Resource.Success -> _uiState.update { uiState ->
+            val selected = (uiState.filterType as? FilterType.Searchable.Genres)?.selectedOptions
+
             uiState.copy(
               loading = false,
               filterType = FilterType.Searchable.Genres(
                 options = result.data,
-                selectedOptions = emptyList(),
+                selectedOptions = selected ?: emptyList(),
                 query = null,
               ),
               error = null,

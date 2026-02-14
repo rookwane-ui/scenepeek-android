@@ -19,7 +19,7 @@ import org.jetbrains.compose.resources.stringResource
 fun GenresSection(
   modifier: Modifier = Modifier,
   genres: List<Genre>,
-  onGenreClick: (Genre) -> Unit,
+  onClick: (Genre) -> Unit,
 ) {
   Column(modifier = modifier) {
     Text(
@@ -34,7 +34,7 @@ fun GenresSection(
       genres.forEach { genre ->
         GenreLabel(
           genre = genre,
-          onGenreClick = onGenreClick,
+          onClick = onClick,
         )
       }
     }

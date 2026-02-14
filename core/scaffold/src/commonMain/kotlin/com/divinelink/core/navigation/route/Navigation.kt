@@ -148,7 +148,11 @@ sealed interface Navigation {
   data object JellyseerrRequestsRoute : Navigation
 
   @Serializable
-  data object DiscoverRoute : Navigation
+  data class DiscoverRoute(
+    val mediaType: String?,
+    val encodedGenre: String?,
+    val encodedKeyword: String?,
+  ) : Navigation
 
   @Serializable
   data class MediaPosterRoute(

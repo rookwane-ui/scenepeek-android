@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontStyle
+import com.divinelink.core.commons.util.encodeToString
 import com.divinelink.core.designsystem.component.ScenePeekLazyColumn
 import com.divinelink.core.designsystem.theme.LocalBottomNavigationPadding
 import com.divinelink.core.designsystem.theme.dimensions
@@ -69,7 +70,15 @@ fun AboutFormContent(
         GenresSection(
           modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.keyline_16),
           genres = genres,
-          onGenreClick = {},
+          onClick = {
+            onNavigate(
+              Navigation.DiscoverRoute(
+                mediaType = aboutData.mediaType.value,
+                encodedGenre = it.encodeToString(),
+                encodedKeyword = null,
+              ),
+            )
+          },
         )
       }
     }

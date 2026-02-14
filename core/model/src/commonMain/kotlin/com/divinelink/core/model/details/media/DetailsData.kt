@@ -7,9 +7,11 @@ import com.divinelink.core.model.details.Person
 import com.divinelink.core.model.details.Season
 import com.divinelink.core.model.details.review.Review
 import com.divinelink.core.model.media.MediaItem
+import com.divinelink.core.model.media.MediaType
 
 sealed interface DetailsData {
   data class About(
+    val mediaType: MediaType,
     val overview: String?,
     val tagline: String?,
     val genres: List<Genre>?,

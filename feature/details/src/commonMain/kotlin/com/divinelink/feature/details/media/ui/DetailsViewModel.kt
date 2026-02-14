@@ -181,7 +181,12 @@ class DetailsViewModel(
                   val aboutOrder = MovieTab.About.order
                   val castOrder = MovieTab.Cast.order
                   val updatedForms = viewState.forms.toMutableMap().apply {
-                    this[aboutOrder] = DetailsForm.Content(getAboutDetailsData(data))
+                    this[aboutOrder] = DetailsForm.Content(
+                      getAboutDetailsData(
+                        mediaType = MediaType.MOVIE,
+                        result = data,
+                      ),
+                    )
                     this[castOrder] = DetailsForm.Content(
                       DetailsData.Cast(
                         isTv = false,
@@ -201,7 +206,12 @@ class DetailsViewModel(
                   val aboutOrder = TvTab.About.order
                   val seasonsTabOrder = TvTab.Seasons.order
                   val updatedForms = viewState.forms.toMutableMap().apply {
-                    this[aboutOrder] = DetailsForm.Content(getAboutDetailsData(data))
+                    this[aboutOrder] = DetailsForm.Content(
+                      getAboutDetailsData(
+                        mediaType = MediaType.TV,
+                        result = data,
+                      ),
+                    )
                     this[seasonsTabOrder] = DetailsForm.Content(
                       DetailsData.Seasons((data.mediaDetails as TV).seasons),
                     )
@@ -790,19 +800,22 @@ class DetailsViewModel(
     }
   }
 
-  private fun getAboutDetailsData(result: MediaDetailsResult.DetailsSuccess): DetailsData.About =
-    DetailsData.About(
-      overview = result.mediaDetails.overview,
-      tagline = result.mediaDetails.tagline,
-      genres = result.mediaDetails.genres,
-      creators = when (result.mediaDetails) {
-        is TV -> (result.mediaDetails as TV).creators
-        is Movie -> (result.mediaDetails as Movie).creators
-      },
-      information = result.mediaDetails.information,
-      collection = (result.mediaDetails as? Movie)?.collection,
-      keywords = result.mediaDetails.keywords,
-    )
+  private fun getAboutDetailsData(
+    mediaType: MediaType,
+    result: MediaDetailsResult.DetailsSuccess,
+  ): DetailsData.About = DetailsData.About(
+    mediaType = mediaType,
+    overview = result.mediaDetails.overview,
+    tagline = result.mediaDetails.tagline,
+    genres = result.mediaDetails.genres,
+    creators = when (result.mediaDetails) {
+      is TV -> (result.mediaDetails as TV).creators
+      is Movie -> (result.mediaDetails as Movie).creators
+    },
+    information = result.mediaDetails.information,
+    collection = (result.mediaDetails as? Movie)?.collection,
+    keywords = result.mediaDetails.keywords,
+  )
 
   /**
    * @param overrideSeasonStatus If true, the season status will be set to UNKNOWN.

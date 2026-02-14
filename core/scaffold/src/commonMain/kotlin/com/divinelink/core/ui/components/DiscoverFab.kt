@@ -23,6 +23,14 @@ fun ScaffoldState.DiscoverFab(
     icon = Icons.Default.SavedSearch,
     text = stringResource(UiString.core_ui_discover),
     expanded = expanded,
-    onClick = { onNavigate(Navigation.DiscoverRoute) },
+    onClick = {
+      onNavigate(
+        Navigation.DiscoverRoute(
+          mediaType = null,
+          encodedGenre = null,
+          encodedKeyword = null,
+        ),
+      )
+    },
   )
 }
