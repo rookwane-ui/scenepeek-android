@@ -45,6 +45,12 @@ data class SelectFilterUiState(
           lessThan = 10,
           minimumVotes = 10,
         )
+        FilterModal.Keywords -> FilterType.Keywords(
+          options = emptyList(),
+          selectedOptions = emptyList(),
+          query = null,
+          loading = false,
+        )
       },
     )
   }

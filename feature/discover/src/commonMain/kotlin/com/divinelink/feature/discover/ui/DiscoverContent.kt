@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
@@ -33,12 +34,15 @@ import com.divinelink.core.navigation.route.Navigation
 import com.divinelink.core.navigation.utilities.toRoute
 import com.divinelink.core.ui.Previews
 import com.divinelink.core.ui.UiDrawable
+import com.divinelink.core.ui.UiString
 import com.divinelink.core.ui.blankslate.BlankSlate
 import com.divinelink.core.ui.blankslate.BlankSlateState
 import com.divinelink.core.ui.components.LoadingContent
 import com.divinelink.core.ui.components.clearButton
 import com.divinelink.core.ui.composition.PreviewLocalProvider
 import com.divinelink.core.ui.list.ScrollableMediaContent
+import com.divinelink.core.ui.resources.core_ui_genres
+import com.divinelink.core.ui.resources.core_ui_keywords
 import com.divinelink.core.ui.resources.no_results
 import com.divinelink.core.ui.tab.ScenePeekSecondaryTabs
 import com.divinelink.feature.discover.DiscoverAction
@@ -66,6 +70,7 @@ fun DiscoverContent(
     pageCount = { uiState.tabs.size },
   )
   var filterModal by remember { mutableStateOf<FilterModal?>(null) }
+  val filterState = rememberLazyListState()
 
   LaunchedEffect(pagerState) {
     snapshotFlow { pagerState.currentPage }.collect { page ->
@@ -73,9 +78,14 @@ fun DiscoverContent(
     }
   }
 
+  LaunchedEffect(Unit) {
+    filterState.scrollToItem(uiState.currentFilters.firstSelectedFilterIndex)
+  }
+
   filterModal?.let { type ->
     SelectFilterModalBottomSheet(
       type = type,
+      uuid = uiState.uuid,
       mediaType = uiState.selectedTab.mediaType,
       onDismissRequest = {
         filterModal = null
@@ -101,6 +111,7 @@ fun DiscoverContent(
         start = MaterialTheme.dimensions.keyline_8,
         end = MaterialTheme.dimensions.keyline_16,
       ),
+      state = filterState,
     ) {
       clearButton(
         isVisible = uiState.currentFilters.hasSelectedFilters,
@@ -108,12 +119,14 @@ fun DiscoverContent(
       )
 
       item {
-        DiscoverFilterChip.Genre(
+        DiscoverFilterChip.MultiSelect(
           modifier = Modifier
             .animateItem()
             .animateContentSize(),
           filters = uiState.currentFilters.genres,
           onClick = { filterModal = FilterModal.Genre },
+          title = UiString.core_ui_genres,
+          name = uiState.currentFilters.genres.firstOrNull()?.name,
         )
       }
 
@@ -155,6 +168,18 @@ fun DiscoverContent(
           votes = uiState.currentFilters.votes,
           voteAverage = uiState.currentFilters.voteAverage,
           onClick = { filterModal = FilterModal.VoteAverage },
+        )
+      }
+
+      item {
+        DiscoverFilterChip.MultiSelect(
+          modifier = Modifier
+            .animateItem()
+            .animateContentSize(),
+          filters = uiState.currentFilters.keywords,
+          onClick = { filterModal = FilterModal.Keywords },
+          title = UiString.core_ui_keywords,
+          name = uiState.currentFilters.keywords.firstOrNull()?.name,
         )
       }
     }

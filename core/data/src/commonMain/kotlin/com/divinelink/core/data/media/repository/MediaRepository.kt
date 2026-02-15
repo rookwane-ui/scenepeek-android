@@ -1,8 +1,11 @@
+@file:Suppress("TooManyFunctions")
+
 package com.divinelink.core.data.media.repository
 
 import com.divinelink.core.model.Genre
 import com.divinelink.core.model.PaginationData
 import com.divinelink.core.model.details.Episode
+import com.divinelink.core.model.details.Keyword
 import com.divinelink.core.model.details.Season
 import com.divinelink.core.model.details.SeasonDetails
 import com.divinelink.core.model.discover.DiscoverFilter
@@ -53,6 +56,8 @@ interface MediaRepository {
   fun fetchFavorites(): Flow<MediaListResult>
 
   fun fetchFavorites(mediaType: MediaType): Flow<Result<PaginationData<MediaItem>>>
+
+  suspend fun fetchSearchKeywords(request: SearchRequestApi): Result<PaginationData<Keyword>>
 
   /**
    * Request movies through a search query. Uses pagination.

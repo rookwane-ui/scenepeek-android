@@ -10,9 +10,12 @@ import com.divinelink.core.model.discover.YearType
 import com.divinelink.core.model.exception.AppException
 import com.divinelink.core.model.media.MediaType
 import com.divinelink.core.network.Resource
+import com.divinelink.core.network.media.model.search.movie.SearchRequestApi
 import com.divinelink.core.ui.blankslate.BlankSlateState
 import com.divinelink.feature.discover.FilterModal
 import com.divinelink.feature.discover.FilterType
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -25,6 +28,7 @@ import kotlinx.coroutines.launch
 class SelectFilterViewModel(
   type: FilterModal,
   mediaType: MediaType,
+  private val entryPointUuid: String,
   private val repository: MediaRepository,
   private val filterRepository: FilterRepository,
 ) : ViewModel() {
@@ -37,11 +41,13 @@ class SelectFilterViewModel(
   )
   val uiState: StateFlow<SelectFilterUiState> = _uiState
 
+  private var searchJob: Job? = null
+
   init {
     when (type) {
       FilterModal.Country ->
         filterRepository
-          .selectedCountry
+          .selectedCountry(uuid = entryPointUuid)
           .map { it[_uiState.value.mediaType] }
           .distinctUntilChanged()
           .onEach { country ->
@@ -59,7 +65,7 @@ class SelectFilterViewModel(
       FilterModal.Genre -> {
         fetchGenres(mediaType)
         filterRepository
-          .selectedGenres
+          .selectedGenres(uuid = entryPointUuid)
           .map { it[_uiState.value.mediaType] ?: emptyList() }
           .distinctUntilChanged()
           .onEach { genres ->
@@ -75,7 +81,7 @@ class SelectFilterViewModel(
       }
       FilterModal.Language ->
         filterRepository
-          .selectedLanguage
+          .selectedLanguage(uuid = entryPointUuid)
           .map { it[_uiState.value.mediaType] }
           .distinctUntilChanged()
           .onEach { language ->
@@ -92,7 +98,7 @@ class SelectFilterViewModel(
 
       FilterModal.VoteAverage -> {
         filterRepository
-          .voteAverage
+          .voteAverage(uuid = entryPointUuid)
           .map { it[_uiState.value.mediaType] }
           .distinctUntilChanged()
           .onEach { voteAverage ->
@@ -108,7 +114,7 @@ class SelectFilterViewModel(
           .launchIn(viewModelScope)
 
         filterRepository
-          .minimumVotes
+          .minimumVotes(uuid = entryPointUuid)
           .map { it[uiState.value.mediaType] }
           .distinctUntilChanged()
           .onEach { votes ->
@@ -124,7 +130,7 @@ class SelectFilterViewModel(
       }
       FilterModal.Year ->
         filterRepository
-          .year
+          .year(uuid = entryPointUuid)
           .map { it[_uiState.value.mediaType] }
           .distinctUntilChanged()
           .onEach { filter ->
@@ -144,6 +150,22 @@ class SelectFilterViewModel(
                 )
                 null -> uiState.copy(filterType = FilterType.Year.Any)
               }
+            }
+          }
+          .launchIn(viewModelScope)
+
+      FilterModal.Keywords ->
+        filterRepository
+          .keywords(uuid = entryPointUuid)
+          .map { it[_uiState.value.mediaType] ?: emptyList() }
+          .distinctUntilChanged()
+          .onEach { keywords ->
+            _uiState.update {
+              it.copy(
+                filterType = (it.filterType as FilterType.Keywords).copy(
+                  selectedOptions = keywords,
+                ),
+              )
             }
           }
           .launchIn(viewModelScope)
@@ -173,22 +195,26 @@ class SelectFilterViewModel(
             )
           }
           is Resource.Loading -> _uiState.update { uiState ->
+            val selected = (uiState.filterType as? FilterType.Searchable.Genres)?.selectedOptions
+
             uiState.copy(
               loading = false,
               filterType = FilterType.Searchable.Genres(
                 options = result.data ?: emptyList(),
-                selectedOptions = emptyList(),
+                selectedOptions = selected ?: emptyList(),
                 query = null,
               ),
               error = null,
             )
           }
           is Resource.Success -> _uiState.update { uiState ->
+            val selected = (uiState.filterType as? FilterType.Searchable.Genres)?.selectedOptions
+
             uiState.copy(
               loading = false,
               filterType = FilterType.Searchable.Genres(
                 options = result.data,
-                selectedOptions = emptyList(),
+                selectedOptions = selected ?: emptyList(),
                 query = null,
               ),
               error = null,
@@ -202,6 +228,7 @@ class SelectFilterViewModel(
   fun onAction(action: SelectFilterAction) {
     when (action) {
       SelectFilterAction.ClearGenres -> handleClearGenres()
+      SelectFilterAction.ClearKeywords -> handleClearKeywords()
       SelectFilterAction.ResetRatingFilters -> handleResetRatings()
       SelectFilterAction.Retry -> handleRetry()
       is SelectFilterAction.SelectGenre -> handleSelectGenre(action)
@@ -215,6 +242,49 @@ class SelectFilterViewModel(
       is SelectFilterAction.UpdateStartYear -> handleUpdateStartYear(action.startYear)
       is SelectFilterAction.UpdateEndYear -> handleUpdateEndYear(action.endYear)
       is SelectFilterAction.OnSelectDecade -> handleSelectDecade(action.decade)
+      is SelectFilterAction.SearchKeywords -> handleSearchKeywords(action)
+      is SelectFilterAction.SelectKeyword -> handleSelectKeyword(action)
+    }
+  }
+
+  private fun handleSelectKeyword(action: SelectFilterAction.SelectKeyword) {
+    filterRepository.updateKeyword(
+      mediaType = _uiState.value.mediaType,
+      uuid = entryPointUuid,
+      keyword = action.keyword,
+    )
+  }
+
+  private fun handleSearchKeywords(action: SelectFilterAction.SearchKeywords) {
+    searchJob?.cancel()
+
+    _uiState.update { state ->
+      state.copy(
+        filterType = (state.filterType as FilterType.Keywords).copy(
+          loading = true,
+          query = action.query,
+        ),
+      )
+    }
+
+    searchJob = viewModelScope.launch {
+      delay(300)
+
+      repository.fetchSearchKeywords(
+        request = SearchRequestApi(
+          query = action.query,
+          page = 1,
+        ),
+      ).map { result ->
+        _uiState.update { state ->
+          state.copy(
+            filterType = (state.filterType as FilterType.Keywords).copy(
+              options = result.list,
+              loading = false,
+            ),
+          )
+        }
+      }
     }
   }
 
@@ -227,6 +297,7 @@ class SelectFilterViewModel(
           is FilterType.Searchable.Languages -> uiState.filterType.copy(query = action.query)
           is FilterType.VoteAverage -> uiState.filterType
           is FilterType.Year -> uiState.filterType
+          is FilterType.Keywords -> uiState.filterType.copy(query = action.query)
         },
       )
     }
@@ -235,12 +306,20 @@ class SelectFilterViewModel(
   private fun handleClearGenres() {
     filterRepository.updateSelectedGenres(
       mediaType = _uiState.value.mediaType,
+      uuid = entryPointUuid,
       genres = emptyList(),
     )
   }
 
+  private fun handleClearKeywords() {
+    filterRepository.clearKeywords(
+      uuid = entryPointUuid,
+      mediaType = _uiState.value.mediaType,
+    )
+  }
+
   private fun handleResetRatings() {
-    filterRepository.clearRatings(mediaType = _uiState.value.mediaType)
+    filterRepository.clearRatings(uuid = entryPointUuid, mediaType = _uiState.value.mediaType)
   }
 
   private fun handleRetry() {
@@ -250,6 +329,7 @@ class SelectFilterViewModel(
       FilterModal.Language -> Unit
       FilterModal.VoteAverage -> Unit
       FilterModal.Year -> Unit
+      FilterModal.Keywords -> Unit
     }
   }
 
@@ -264,6 +344,7 @@ class SelectFilterViewModel(
 
     filterRepository.updateSelectedGenres(
       mediaType = _uiState.value.mediaType,
+      uuid = entryPointUuid,
       genres = genres,
     )
   }
@@ -279,6 +360,7 @@ class SelectFilterViewModel(
     }
     filterRepository.updateLanguage(
       mediaType = _uiState.value.mediaType,
+      uuid = entryPointUuid,
       language = language,
     )
   }
@@ -294,6 +376,7 @@ class SelectFilterViewModel(
     }
     filterRepository.updateCountry(
       mediaType = _uiState.value.mediaType,
+      uuid = entryPointUuid,
       country = country,
     )
   }
@@ -301,6 +384,7 @@ class SelectFilterViewModel(
   private fun handleUpdateVoteRange(action: SelectFilterAction.UpdateVoteRange) {
     filterRepository.updateVoteAverage(
       mediaType = _uiState.value.mediaType,
+      uuid = entryPointUuid,
       voteAverage = action.voteAverage,
     )
   }
@@ -308,6 +392,7 @@ class SelectFilterViewModel(
   private fun handleUpdateMinimumVotes(action: SelectFilterAction.UpdateMinimumVotes) {
     filterRepository.updateMinimumVotes(
       mediaType = _uiState.value.mediaType,
+      uuid = entryPointUuid,
       votes = action.votes,
     )
   }
@@ -325,6 +410,7 @@ class SelectFilterViewModel(
 
     filterRepository.updateYear(
       mediaType = _uiState.value.mediaType,
+      uuid = entryPointUuid,
       year = filter,
     )
   }
@@ -332,6 +418,7 @@ class SelectFilterViewModel(
   private fun handleUpdateSingleYear(year: Int) {
     filterRepository.updateYear(
       mediaType = _uiState.value.mediaType,
+      uuid = entryPointUuid,
       year = DiscoverFilter.Year.Single(year = year),
     )
   }
@@ -339,6 +426,7 @@ class SelectFilterViewModel(
   private fun handleSelectDecade(decade: Decade) {
     filterRepository.updateYear(
       mediaType = _uiState.value.mediaType,
+      uuid = entryPointUuid,
       year = DiscoverFilter.Year.Decade(decade),
     )
   }
@@ -350,6 +438,7 @@ class SelectFilterViewModel(
 
     filterRepository.updateYear(
       mediaType = _uiState.value.mediaType,
+      uuid = entryPointUuid,
       year = DiscoverFilter.Year.Range(
         startYear = startYear,
         endYear = type.endYear,
@@ -364,6 +453,7 @@ class SelectFilterViewModel(
 
     filterRepository.updateYear(
       mediaType = _uiState.value.mediaType,
+      uuid = entryPointUuid,
       year = DiscoverFilter.Year.Range(
         startYear = type.startYear,
         endYear = endYear,

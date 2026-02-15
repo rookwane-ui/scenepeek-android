@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontStyle
+import com.divinelink.core.commons.util.encodeToString
 import com.divinelink.core.designsystem.component.ScenePeekLazyColumn
 import com.divinelink.core.designsystem.theme.LocalBottomNavigationPadding
 import com.divinelink.core.designsystem.theme.dimensions
@@ -25,7 +26,10 @@ import com.divinelink.feature.details.media.ui.components.GenresSection
 import com.divinelink.feature.details.media.ui.components.KeywordsSection
 import com.divinelink.feature.details.media.ui.components.MovieInformationSection
 import com.divinelink.feature.details.media.ui.components.TvInformationSection
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
+@OptIn(ExperimentalUuidApi::class)
 @Composable
 fun AboutFormContent(
   modifier: Modifier = Modifier,
@@ -69,7 +73,15 @@ fun AboutFormContent(
         GenresSection(
           modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.keyline_16),
           genres = genres,
-          onGenreClick = {},
+          onClick = {
+            onNavigate(
+              Navigation.DiscoverRoute(
+                entryPointUuid = Uuid.random().toHexString(),
+                mediaType = aboutData.mediaType.value,
+                encodedGenre = it.encodeToString(),
+              ),
+            )
+          },
         )
       }
     }
@@ -125,16 +137,26 @@ fun AboutFormContent(
     }
 
     aboutData.keywords?.let { keywords ->
-      item {
-        HorizontalDivider(
-          modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.keyline_16),
-        )
-      }
-      item {
-        KeywordsSection(
-          keywords = keywords,
-          onClick = {},
-        )
+      if (keywords.isNotEmpty()) {
+        item {
+          HorizontalDivider(
+            modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.keyline_16),
+          )
+        }
+        item {
+          KeywordsSection(
+            keywords = keywords,
+            onClick = {
+              onNavigate(
+                Navigation.DiscoverRoute(
+                  entryPointUuid = Uuid.random().toHexString(),
+                  mediaType = aboutData.mediaType.value,
+                  encodedKeyword = it.encodeToString(),
+                ),
+              )
+            },
+          )
+        }
       }
     }
 

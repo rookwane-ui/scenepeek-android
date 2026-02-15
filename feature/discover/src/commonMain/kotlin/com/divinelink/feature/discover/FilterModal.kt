@@ -6,4 +6,5 @@ sealed interface FilterModal {
   data object Language : FilterModal
   data object Country : FilterModal
   data object VoteAverage : FilterModal
+  data object Keywords : FilterModal
 }

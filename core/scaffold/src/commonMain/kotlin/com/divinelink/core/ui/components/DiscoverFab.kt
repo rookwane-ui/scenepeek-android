@@ -12,7 +12,10 @@ import com.divinelink.core.ui.TestTags
 import com.divinelink.core.ui.UiString
 import com.divinelink.core.ui.resources.core_ui_discover
 import org.jetbrains.compose.resources.stringResource
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
+@OptIn(ExperimentalUuidApi::class)
 @Composable
 fun ScaffoldState.DiscoverFab(
   expanded: Boolean,
@@ -23,6 +26,15 @@ fun ScaffoldState.DiscoverFab(
     icon = Icons.Default.SavedSearch,
     text = stringResource(UiString.core_ui_discover),
     expanded = expanded,
-    onClick = { onNavigate(Navigation.DiscoverRoute) },
+    onClick = {
+      onNavigate(
+        Navigation.DiscoverRoute(
+          entryPointUuid = Uuid.random().toHexString(),
+          mediaType = null,
+          encodedGenre = null,
+          encodedKeyword = null,
+        ),
+      )
+    },
   )
 }

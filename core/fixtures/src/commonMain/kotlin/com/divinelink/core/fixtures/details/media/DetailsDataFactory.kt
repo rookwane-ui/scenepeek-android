@@ -7,11 +7,13 @@ import com.divinelink.core.fixtures.model.details.KeywordFactory
 import com.divinelink.core.fixtures.model.details.MediaDetailsFactory
 import com.divinelink.core.fixtures.model.media.MediaItemFactory
 import com.divinelink.core.model.details.media.DetailsData
+import com.divinelink.core.model.media.MediaType
 
 object DetailsDataFactory {
 
   object Empty {
     fun about() = DetailsData.About(
+      mediaType = MediaType.UNKNOWN,
       overview = null,
       tagline = null,
       genres = null,
@@ -41,6 +43,7 @@ object DetailsDataFactory {
 
   object Movie {
     fun about() = DetailsData.About(
+      mediaType = MediaType.MOVIE,
       overview = MediaDetailsFactory.FightClub().overview,
       tagline = MediaDetailsFactory.FightClub().tagline,
       genres = MediaDetailsFactory.FightClub().genres,
@@ -66,6 +69,7 @@ object DetailsDataFactory {
 
   object Tv {
     fun about() = DetailsData.About(
+      mediaType = MediaType.TV,
       overview = MediaDetailsFactory.TheOffice().overview,
       tagline = MediaDetailsFactory.TheOffice().tagline,
       genres = MediaDetailsFactory.TheOffice().genres,
