@@ -26,7 +26,10 @@ import com.divinelink.feature.details.media.ui.components.GenresSection
 import com.divinelink.feature.details.media.ui.components.KeywordsSection
 import com.divinelink.feature.details.media.ui.components.MovieInformationSection
 import com.divinelink.feature.details.media.ui.components.TvInformationSection
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
+@OptIn(ExperimentalUuidApi::class)
 @Composable
 fun AboutFormContent(
   modifier: Modifier = Modifier,
@@ -73,6 +76,7 @@ fun AboutFormContent(
           onClick = {
             onNavigate(
               Navigation.DiscoverRoute(
+                entryPointUuid = Uuid.random().toHexString(),
                 mediaType = aboutData.mediaType.value,
                 encodedGenre = it.encodeToString(),
               ),
@@ -145,6 +149,7 @@ fun AboutFormContent(
             onClick = {
               onNavigate(
                 Navigation.DiscoverRoute(
+                  entryPointUuid = Uuid.random().toHexString(),
                   mediaType = aboutData.mediaType.value,
                   encodedKeyword = it.encodeToString(),
                 ),

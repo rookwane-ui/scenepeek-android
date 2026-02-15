@@ -61,7 +61,6 @@ fun KeywordsFiltersContent(
       contentPadding = PaddingValues(MaterialTheme.dimensions.keyline_16),
       verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.keyline_4),
     ) {
-
       item {
         Text(
           textAlign = TextAlign.Start,

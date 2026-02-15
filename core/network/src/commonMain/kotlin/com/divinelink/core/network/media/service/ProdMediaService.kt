@@ -281,9 +281,8 @@ class ProdMediaService(
       restClient.get<CollectionDetailsResponse>(url = buildCollectionsUrl(id = id))
     }
 
-  override suspend fun searchKeywords(
-    request: SearchRequestApi,
-  ): Result<SearchKeywordResponse> = runCatching {
-    restClient.get<SearchKeywordResponse>(url = buildSearchKeywordUrl(request = request))
-  }
+  override suspend fun searchKeywords(request: SearchRequestApi): Result<SearchKeywordResponse> =
+    runCatching {
+      restClient.get<SearchKeywordResponse>(url = buildSearchKeywordUrl(request = request))
+    }
 }

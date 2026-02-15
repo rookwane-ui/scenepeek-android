@@ -26,6 +26,8 @@ import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 class DiscoverViewModel(
   private val filterRepository: FilterRepository,
@@ -34,7 +36,9 @@ class DiscoverViewModel(
   savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
+  @OptIn(ExperimentalUuidApi::class)
   private val route = Navigation.DiscoverRoute(
+    entryPointUuid = savedStateHandle.get<String>("entryPointUuid") ?: Uuid.random().toHexString(),
     mediaType = savedStateHandle.get<String>("mediaType"),
     encodedGenre = savedStateHandle.get<String>("encodedGenre"),
     encodedKeyword = savedStateHandle.get<String>("encodedKeyword"),
@@ -47,8 +51,6 @@ class DiscoverViewModel(
 
   init {
     viewModelScope.launch {
-      filterRepository.clear(_uiState.value.selectedMedia)
-
       val mediaType = MediaType.from(route.mediaType)
       val genre = route.encodedGenre?.decodeFromString<Genre>()
       val keyword = route.encodedKeyword?.decodeFromString<Keyword>()
@@ -56,6 +58,7 @@ class DiscoverViewModel(
       genre?.let { genre ->
         filterRepository.updateSelectedGenres(
           mediaType = mediaType,
+          uuid = route.entryPointUuid,
           genres = listOf(genre),
         )
       }
@@ -63,10 +66,116 @@ class DiscoverViewModel(
       keyword?.let { keyword ->
         filterRepository.updateKeyword(
           mediaType = mediaType,
+          uuid = route.entryPointUuid,
           keyword = keyword,
         )
       }
     }
+
+    filterRepository
+      .selectedGenres(route.entryPointUuid)
+      .map { it[uiState.value.selectedMedia] ?: emptyList() }
+      .onEach { genres ->
+        _uiState.update { uiState ->
+          uiState.copy(
+            filters = uiState.filters.updateFilters(
+              mediaType = uiState.selectedTab.mediaType,
+              update = { it.copy(genres = genres) },
+            ),
+          )
+        }
+      }
+      .launchIn(viewModelScope)
+
+    filterRepository
+      .selectedLanguage(route.entryPointUuid)
+      .map { it[uiState.value.selectedMedia] }
+      .onEach { language ->
+        _uiState.update { uiState ->
+          uiState.copy(
+            filters = uiState.filters.updateFilters(
+              mediaType = uiState.selectedTab.mediaType,
+              update = { it.copy(language = language) },
+            ),
+          )
+        }
+      }
+      .launchIn(viewModelScope)
+
+    filterRepository
+      .selectedCountry(route.entryPointUuid)
+      .map { it[uiState.value.selectedMedia] }
+      .onEach { country ->
+        _uiState.update { uiState ->
+          uiState.copy(
+            filters = uiState.filters.updateFilters(
+              mediaType = uiState.selectedTab.mediaType,
+              update = { it.copy(country = country) },
+            ),
+          )
+        }
+      }
+      .launchIn(viewModelScope)
+
+    filterRepository
+      .voteAverage(route.entryPointUuid)
+      .map { it[uiState.value.selectedMedia] }
+      .onEach { voteAverage ->
+        _uiState.update { uiState ->
+          uiState.copy(
+            filters = uiState.filters.updateFilters(
+              mediaType = uiState.selectedTab.mediaType,
+              update = { it.copy(voteAverage = voteAverage) },
+            ),
+          )
+        }
+      }
+      .launchIn(viewModelScope)
+
+    filterRepository
+      .minimumVotes(route.entryPointUuid)
+      .map { it[uiState.value.selectedMedia] }
+      .onEach { votes ->
+        _uiState.update { uiState ->
+          uiState.copy(
+            filters = uiState.filters.updateFilters(
+              mediaType = uiState.selectedTab.mediaType,
+              update = { it.copy(votes = votes) },
+            ),
+          )
+        }
+      }
+      .launchIn(viewModelScope)
+
+    filterRepository
+      .year(route.entryPointUuid)
+      .map { it[uiState.value.selectedMedia] }
+      .onEach { filter ->
+        _uiState.update { uiState ->
+          uiState.copy(
+            filters = uiState.filters.updateFilters(
+              mediaType = uiState.selectedTab.mediaType,
+              update = { it.copy(year = filter) },
+            ),
+          )
+        }
+      }
+      .launchIn(viewModelScope)
+
+    filterRepository
+      .keywords(route.entryPointUuid)
+      .map { it[uiState.value.selectedMedia] ?: emptyList() }
+      .onEach { keywords ->
+        _uiState.update { uiState ->
+          uiState.copy(
+            filters = uiState.filters.updateFilters(
+              mediaType = uiState.selectedTab.mediaType,
+              update = { it.copy(keywords = keywords) },
+            ),
+          )
+        }
+      }
+      .launchIn(viewModelScope)
 
     preferencesRepository
       .uiPreferences
@@ -82,113 +191,7 @@ class DiscoverViewModel(
       .distinctUntilChanged()
       .onEach { sortMap ->
         _uiState.update { uiState -> uiState.copy(sortOption = sortMap) }
-
         handleDiscoverMedia(reset = true)
-      }
-      .launchIn(viewModelScope)
-
-    filterRepository
-      .selectedGenres
-      .map { it[uiState.value.selectedMedia] ?: emptyList() }
-      .onEach { genres ->
-        _uiState.update { uiState ->
-          uiState.copy(
-            filters = uiState.filters.updateFilters(
-              mediaType = uiState.selectedTab.mediaType,
-              update = { it.copy(genres = genres) },
-            ),
-          )
-        }
-      }
-      .launchIn(viewModelScope)
-
-    filterRepository
-      .selectedLanguage
-      .map { it[uiState.value.selectedMedia] }
-      .onEach { language ->
-        _uiState.update { uiState ->
-          uiState.copy(
-            filters = uiState.filters.updateFilters(
-              mediaType = uiState.selectedTab.mediaType,
-              update = { it.copy(language = language) },
-            ),
-          )
-        }
-      }
-      .launchIn(viewModelScope)
-
-    filterRepository
-      .selectedCountry
-      .map { it[uiState.value.selectedMedia] }
-      .onEach { country ->
-        _uiState.update { uiState ->
-          uiState.copy(
-            filters = uiState.filters.updateFilters(
-              mediaType = uiState.selectedTab.mediaType,
-              update = { it.copy(country = country) },
-            ),
-          )
-        }
-      }
-      .launchIn(viewModelScope)
-
-    filterRepository
-      .voteAverage
-      .map { it[uiState.value.selectedMedia] }
-      .onEach { voteAverage ->
-        _uiState.update { uiState ->
-          uiState.copy(
-            filters = uiState.filters.updateFilters(
-              mediaType = uiState.selectedTab.mediaType,
-              update = { it.copy(voteAverage = voteAverage) },
-            ),
-          )
-        }
-      }
-      .launchIn(viewModelScope)
-
-    filterRepository
-      .minimumVotes
-      .map { it[uiState.value.selectedMedia] }
-      .onEach { votes ->
-        _uiState.update { uiState ->
-          uiState.copy(
-            filters = uiState.filters.updateFilters(
-              mediaType = uiState.selectedTab.mediaType,
-              update = { it.copy(votes = votes) },
-            ),
-          )
-        }
-      }
-      .launchIn(viewModelScope)
-
-    filterRepository
-      .year
-      .map { it[uiState.value.selectedMedia] }
-      .onEach { filter ->
-        _uiState.update { uiState ->
-          uiState.copy(
-            filters = uiState.filters.updateFilters(
-              mediaType = uiState.selectedTab.mediaType,
-              update = { it.copy(year = filter) },
-            ),
-          )
-        }
-      }
-      .launchIn(viewModelScope)
-
-    filterRepository
-      .keywords
-      .map { it[uiState.value.selectedMedia] ?: emptyList() }
-      .onEach { keywords ->
-        _uiState.update { uiState ->
-          uiState.copy(
-            filters = uiState.filters.updateFilters(
-              mediaType = uiState.selectedTab.mediaType,
-              update = { it.copy(keywords = keywords) },
-            ),
-          )
-        }
       }
       .launchIn(viewModelScope)
   }
@@ -203,7 +206,10 @@ class DiscoverViewModel(
   }
 
   private fun handleClearFilters() {
-    filterRepository.clear(mediaType = _uiState.value.selectedMedia)
+    filterRepository.clear(
+      uuid = route.entryPointUuid,
+      mediaType = _uiState.value.selectedMedia,
+    )
     handleDiscoverMedia(reset = true)
   }
 
@@ -327,8 +333,8 @@ class DiscoverViewModel(
 
   override fun onCleared() {
     super.onCleared()
-    filterRepository.clear(mediaType = MediaType.TV)
-    filterRepository.clear(mediaType = MediaType.MOVIE)
+    filterRepository.clear(uuid = route.entryPointUuid, mediaType = MediaType.TV)
+    filterRepository.clear(uuid = route.entryPointUuid, mediaType = MediaType.MOVIE)
   }
 
   private fun Map<MediaType, MediaTypeFilters>.updateFilters(

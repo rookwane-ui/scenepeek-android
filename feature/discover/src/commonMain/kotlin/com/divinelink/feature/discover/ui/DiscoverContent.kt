@@ -79,6 +79,7 @@ fun DiscoverContent(
   filterModal?.let { type ->
     SelectFilterModalBottomSheet(
       type = type,
+      uuid = uiState.uuid,
       mediaType = uiState.selectedTab.mediaType,
       onDismissRequest = {
         filterModal = null

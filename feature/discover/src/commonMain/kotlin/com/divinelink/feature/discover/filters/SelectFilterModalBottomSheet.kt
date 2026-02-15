@@ -26,10 +26,11 @@ import org.koin.core.parameter.parametersOf
 @Composable
 fun SelectFilterModalBottomSheet(
   type: FilterModal,
+  uuid: String,
   mediaType: MediaType,
   viewModel: SelectFilterViewModel = koinViewModel(
-    key = "SelectGenreModalBottomSheet-${mediaType.value}-$type",
-  ) { parametersOf(mediaType, type) },
+    key = "SelectGenreModalBottomSheet-${mediaType.value}-$type-$uuid",
+  ) { parametersOf(mediaType, type, uuid) },
   onDismissRequest: () -> Unit,
 ) {
   val density = LocalDensity.current

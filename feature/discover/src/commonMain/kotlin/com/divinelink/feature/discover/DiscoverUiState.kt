@@ -8,6 +8,7 @@ import com.divinelink.core.model.tab.MediaTab
 import com.divinelink.core.navigation.route.Navigation
 
 data class DiscoverUiState(
+  val uuid: String,
   val selectedTabIndex: Int,
   val tabs: List<MediaTab>,
   val pages: Map<MediaType, Int>,
@@ -22,6 +23,7 @@ data class DiscoverUiState(
       val mediaType = MediaType.from(route.mediaType)
 
       return DiscoverUiState(
+        uuid = route.entryPointUuid,
         selectedTabIndex = when (mediaType) {
           MediaType.MOVIE -> MediaTab.Movie.order
           MediaType.TV -> MediaTab.TV.order
