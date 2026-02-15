@@ -8,7 +8,7 @@ fun KeywordsResponse?.map() = this
   ?.keywords
   ?.map { it.map() }
 
-private fun KeywordResponse.map() = Keyword(
+fun KeywordResponse.map() = Keyword(
   id = id,
   name = name,
 )

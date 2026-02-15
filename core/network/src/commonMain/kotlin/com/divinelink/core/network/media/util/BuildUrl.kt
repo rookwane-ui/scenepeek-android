@@ -5,6 +5,7 @@ import com.divinelink.core.model.home.MediaListRequest
 import com.divinelink.core.model.media.MediaType
 import com.divinelink.core.model.sort.SortOption
 import com.divinelink.core.network.Routes
+import com.divinelink.core.network.media.model.search.movie.SearchRequestApi
 import io.ktor.http.URLProtocol
 import io.ktor.http.buildUrl
 import io.ktor.http.encodedPath
@@ -93,7 +94,7 @@ fun buildDiscoverUrl(
           append("primary_release_date.lte", filter.endDateTime)
         }
         is DiscoverFilter.Keywords -> if (filter.ids.isNotEmpty()) {
-          append("with_keywords", filter.ids.joinToString(","))
+          append("with_keywords", filter.ids.joinToString("|"))
         }
       }
     }
@@ -157,5 +158,19 @@ fun buildCollectionsUrl(id: Int): String = buildUrl {
 
   parameters.apply {
     append("language", "en")
+  }
+}.toString()
+
+fun buildSearchKeywordUrl(
+  request: SearchRequestApi,
+): String = buildUrl {
+  protocol = URLProtocol.HTTPS
+  host = Routes.TMDb.HOST
+  encodedPath = Routes.TMDb.V3 + "/search/keyword"
+
+  parameters.apply {
+    append("language", "en")
+    append("query", request.query)
+    append("page", request.page.toString())
   }
 }.toString()

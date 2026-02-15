@@ -8,6 +8,7 @@ import com.divinelink.core.database.person.PersonDao
 import com.divinelink.core.model.Genre
 import com.divinelink.core.model.PaginationData
 import com.divinelink.core.model.details.Episode
+import com.divinelink.core.model.details.Keyword
 import com.divinelink.core.model.details.Season
 import com.divinelink.core.model.details.SeasonDetails
 import com.divinelink.core.model.discover.DiscoverFilter
@@ -395,4 +396,17 @@ class ProdMediaRepository(
   override fun clearAllEpisodeRatings(): Result<Unit> = runCatching {
     dao.clearAllEpisodeRatings()
   }
+
+  override suspend fun fetchSearchKeywords(
+    request: SearchRequestApi,
+  ): Result<PaginationData<Keyword>> = remote
+    .searchKeywords(request)
+    .map { response ->
+      PaginationData(
+        page = response.page,
+        totalPages = response.totalPages,
+        totalResults = response.totalResults,
+        list = response.results.map { it.map() },
+      )
+    }
 }

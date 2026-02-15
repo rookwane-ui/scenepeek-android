@@ -23,6 +23,7 @@ import com.divinelink.core.network.media.model.movie.MoviesResponseApi
 import com.divinelink.core.network.media.model.rating.AddRatingRequestApi
 import com.divinelink.core.network.media.model.rating.AddRatingRequestBodyApi
 import com.divinelink.core.network.media.model.rating.DeleteRatingRequestApi
+import com.divinelink.core.network.media.model.search.SearchKeywordResponse
 import com.divinelink.core.network.media.model.search.movie.SearchRequestApi
 import com.divinelink.core.network.media.model.search.multi.MultiSearchRequestApi
 import com.divinelink.core.network.media.model.search.multi.MultiSearchResponseApi
@@ -35,6 +36,7 @@ import com.divinelink.core.network.media.util.buildFetchDetailsUrl
 import com.divinelink.core.network.media.util.buildFetchMediaListUrl
 import com.divinelink.core.network.media.util.buildFindByIdUrl
 import com.divinelink.core.network.media.util.buildGenreUrl
+import com.divinelink.core.network.media.util.buildSearchKeywordUrl
 import com.divinelink.core.network.media.util.buildSeasonDetailsUrl
 import com.divinelink.core.network.runCatchingWithNetworkRetry
 import kotlinx.coroutines.flow.Flow
@@ -278,4 +280,10 @@ class ProdMediaService(
     runCatching {
       restClient.get<CollectionDetailsResponse>(url = buildCollectionsUrl(id = id))
     }
+
+  override suspend fun searchKeywords(
+    request: SearchRequestApi,
+  ): Result<SearchKeywordResponse> = runCatching {
+    restClient.get<SearchKeywordResponse>(url = buildSearchKeywordUrl(request = request))
+  }
 }

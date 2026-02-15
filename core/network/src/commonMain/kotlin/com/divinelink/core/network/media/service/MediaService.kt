@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package com.divinelink.core.network.media.service
 
 import com.divinelink.core.model.discover.DiscoverFilter
@@ -18,6 +20,7 @@ import com.divinelink.core.network.media.model.find.FindByIdResponseApi
 import com.divinelink.core.network.media.model.movie.MoviesResponseApi
 import com.divinelink.core.network.media.model.rating.AddRatingRequestApi
 import com.divinelink.core.network.media.model.rating.DeleteRatingRequestApi
+import com.divinelink.core.network.media.model.search.SearchKeywordResponse
 import com.divinelink.core.network.media.model.search.movie.SearchRequestApi
 import com.divinelink.core.network.media.model.search.multi.MultiSearchRequestApi
 import com.divinelink.core.network.media.model.search.multi.MultiSearchResponseApi
@@ -86,4 +89,6 @@ interface MediaService {
   ): Result<SeasonDetailsResponse>
 
   suspend fun fetchCollectionDetails(id: Int): Result<CollectionDetailsResponse>
+
+  suspend fun searchKeywords(request: SearchRequestApi): Result<SearchKeywordResponse>
 }
