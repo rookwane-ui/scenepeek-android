@@ -40,6 +40,10 @@ import com.divinelink.feature.onboarding.resources.feature_onboarding_v35_add_em
 import com.divinelink.feature.onboarding.resources.feature_onboarding_welcome_page_description
 import com.divinelink.feature.onboarding.resources.feature_onboarding_welcome_page_title
 import com.divinelink.feature.onboarding.resources.v36_season_and_episode_details_screen
+import com.divinelink.feature.onboarding.resources.v37_clickable_genres_and_keywords
+import com.divinelink.feature.onboarding.resources.v37_detail_keywords
+import com.divinelink.feature.onboarding.resources.v37_discover_by_keyword
+import com.divinelink.feature.onboarding.resources.v37_movies_collection
 import com.divinelink.feature.onboarding.resources.Res as R
 
 object IntroSections {
@@ -166,6 +170,16 @@ object IntroSections {
     IntroSection.Text(UIText.ResourceText(R.string.v36_season_and_episode_details_screen)),
   )
 
+  val v37 = listOf(
+    IntroSection.Header(UIText.ResourceText(R.string.feature_onboarding_changelog)),
+    IntroSection.WhatsNew("v0.27.0"),
+    IntroSection.SecondaryHeader.Added,
+    IntroSection.Text(UIText.ResourceText(R.string.v37_movies_collection)),
+    IntroSection.Text(UIText.ResourceText(R.string.v37_discover_by_keyword)),
+    IntroSection.Text(UIText.ResourceText(R.string.v37_detail_keywords)),
+    IntroSection.Text(UIText.ResourceText(R.string.v37_clickable_genres_and_keywords)),
+  )
+
   /**
    * A map of changelog sections keyed by version code.
    */
@@ -177,5 +191,6 @@ object IntroSections {
     34 to v34,
     35 to v35,
     36 to v36,
+    37 to v37,
   )
 }
