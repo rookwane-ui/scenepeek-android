@@ -34,4 +34,15 @@ data class MediaTypeFilters(
       voteAverage != null ||
       votes != null ||
       year != null
+
+  val firstSelectedFilterIndex: Int = when {
+    genres.isNotEmpty() -> 0
+    year != null -> 1
+    language != null -> 2
+    country != null -> 3
+    voteAverage != null -> 4
+    votes != null -> 5
+    keywords.isNotEmpty() -> 6
+    else -> 0
+  }
 }

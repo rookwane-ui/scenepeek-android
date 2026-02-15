@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.InputChip
@@ -19,15 +20,19 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.divinelink.core.designsystem.theme.dimensions
@@ -41,6 +46,7 @@ import com.divinelink.core.ui.resources.core_ui_search_keywords_description
 import com.divinelink.feature.discover.FilterType
 import com.divinelink.feature.discover.filters.SelectFilterAction
 import com.divinelink.feature.discover.ui.SearchField
+import kotlinx.coroutines.flow.distinctUntilChanged
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -49,7 +55,21 @@ fun KeywordsFiltersContent(
   action: (SelectFilterAction) -> Unit,
   onDismissRequest: () -> Unit,
 ) {
+  val state = rememberLazyListState()
   val density = LocalDensity.current
+  val keyboardController = LocalSoftwareKeyboardController.current
+  val focusManager = LocalFocusManager.current
+
+  LaunchedEffect(state) {
+    snapshotFlow { state.isScrollInProgress }
+      .distinctUntilChanged()
+      .collect { isScrolling ->
+        if (isScrolling) {
+          keyboardController?.hide()
+          focusManager.clearFocus()
+        }
+      }
+  }
 
   Box {
     var actionsSize by remember { mutableStateOf(0.dp) }
@@ -60,6 +80,7 @@ fun KeywordsFiltersContent(
         .fillMaxSize(),
       contentPadding = PaddingValues(MaterialTheme.dimensions.keyline_16),
       verticalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.keyline_4),
+      state = state,
     ) {
       item {
         Text(

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
@@ -69,11 +70,16 @@ fun DiscoverContent(
     pageCount = { uiState.tabs.size },
   )
   var filterModal by remember { mutableStateOf<FilterModal?>(null) }
+  val filterState = rememberLazyListState()
 
   LaunchedEffect(pagerState) {
     snapshotFlow { pagerState.currentPage }.collect { page ->
       action.invoke(DiscoverAction.OnSelectTab(page))
     }
+  }
+
+  LaunchedEffect(Unit) {
+    filterState.scrollToItem(uiState.currentFilters.firstSelectedFilterIndex)
   }
 
   filterModal?.let { type ->
@@ -105,6 +111,7 @@ fun DiscoverContent(
         start = MaterialTheme.dimensions.keyline_8,
         end = MaterialTheme.dimensions.keyline_16,
       ),
+      state = filterState,
     ) {
       clearButton(
         isVisible = uiState.currentFilters.hasSelectedFilters,
