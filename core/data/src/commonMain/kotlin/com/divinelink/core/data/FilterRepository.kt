@@ -125,6 +125,10 @@ class FilterRepository {
     _keywords.value += mediaType to keywords
   }
 
+  fun clearKeywords(mediaType: MediaType) {
+    _keywords.value += mediaType to emptyList()
+  }
+
   fun clearRatings(mediaType: MediaType) {
     _voteAverage.value += mediaType to null
     _minimumVotes.value += mediaType to null

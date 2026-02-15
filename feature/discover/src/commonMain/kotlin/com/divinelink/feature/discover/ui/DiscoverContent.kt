@@ -33,12 +33,15 @@ import com.divinelink.core.navigation.route.Navigation
 import com.divinelink.core.navigation.utilities.toRoute
 import com.divinelink.core.ui.Previews
 import com.divinelink.core.ui.UiDrawable
+import com.divinelink.core.ui.UiString
 import com.divinelink.core.ui.blankslate.BlankSlate
 import com.divinelink.core.ui.blankslate.BlankSlateState
 import com.divinelink.core.ui.components.LoadingContent
 import com.divinelink.core.ui.components.clearButton
 import com.divinelink.core.ui.composition.PreviewLocalProvider
 import com.divinelink.core.ui.list.ScrollableMediaContent
+import com.divinelink.core.ui.resources.core_ui_genres
+import com.divinelink.core.ui.resources.core_ui_keywords
 import com.divinelink.core.ui.resources.no_results
 import com.divinelink.core.ui.tab.ScenePeekSecondaryTabs
 import com.divinelink.feature.discover.DiscoverAction
@@ -108,12 +111,14 @@ fun DiscoverContent(
       )
 
       item {
-        DiscoverFilterChip.Genre(
+        DiscoverFilterChip.MultiSelect(
           modifier = Modifier
             .animateItem()
             .animateContentSize(),
           filters = uiState.currentFilters.genres,
           onClick = { filterModal = FilterModal.Genre },
+          title = UiString.core_ui_genres,
+          name = uiState.currentFilters.genres.firstOrNull()?.name,
         )
       }
 
@@ -155,6 +160,18 @@ fun DiscoverContent(
           votes = uiState.currentFilters.votes,
           voteAverage = uiState.currentFilters.voteAverage,
           onClick = { filterModal = FilterModal.VoteAverage },
+        )
+      }
+
+      item {
+        DiscoverFilterChip.MultiSelect(
+          modifier = Modifier
+            .animateItem()
+            .animateContentSize(),
+          filters = uiState.currentFilters.keywords,
+          onClick = { filterModal = FilterModal.Keywords },
+          title = UiString.core_ui_keywords,
+          name = uiState.currentFilters.keywords.firstOrNull()?.name,
         )
       }
     }

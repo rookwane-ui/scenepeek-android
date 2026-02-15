@@ -16,6 +16,7 @@ import com.divinelink.core.ui.resources.core_ui_country
 import com.divinelink.core.ui.resources.core_ui_language
 import com.divinelink.feature.discover.FilterModal
 import com.divinelink.feature.discover.FilterType
+import com.divinelink.feature.discover.filters.keyword.KeywordsFiltersContent
 import com.divinelink.feature.discover.filters.year.YearFilterContent
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -86,7 +87,12 @@ fun SelectFilterModalBottomSheet(
       )
       is FilterType.Year -> YearFilterContent(
         filter = filterType,
-        action = { viewModel.onAction(it) },
+        action = viewModel::onAction,
+      )
+      is FilterType.Keywords -> KeywordsFiltersContent(
+        keywords = filterType,
+        action = viewModel::onAction,
+        onDismissRequest = onDismissRequest,
       )
     }
   }

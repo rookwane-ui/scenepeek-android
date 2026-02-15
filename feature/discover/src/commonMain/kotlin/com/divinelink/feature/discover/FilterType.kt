@@ -1,6 +1,7 @@
 package com.divinelink.feature.discover
 
 import com.divinelink.core.model.Genre
+import com.divinelink.core.model.details.Keyword
 import com.divinelink.core.model.discover.YearType
 import com.divinelink.core.model.locale.Country
 import com.divinelink.core.model.locale.Language
@@ -45,6 +46,18 @@ sealed interface FilterType {
           options.filter { it.name.contains(other = query, ignoreCase = true) }
         } ?: options
     }
+  }
+
+  data class Keywords(
+    override val options: List<Keyword>,
+    override val selectedOptions: List<Keyword>,
+    override val query: String?,
+    val loading: Boolean,
+  ) : Searchable {
+    override val visibleOptions: List<Keyword>
+      get() = selectedOptions
+        .plus(options)
+        .distinctBy { it.id }
   }
 
   data class VoteAverage(
