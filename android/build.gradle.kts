@@ -4,7 +4,6 @@ plugins {
 
   alias(libs.plugins.firebase.appdistribution)
   alias(libs.plugins.firebase.crashlytics)
-  alias(libs.plugins.gms)
 }
 
 android {
@@ -64,10 +63,7 @@ dependencies {
   implementation(projects.app)
   implementation(projects.core.android)
 
-  implementation(platform(libs.firebase.bom))
-  implementation(libs.firebase.config)
   implementation(libs.firebase.crashlytics)
-  implementation(libs.firebase.analytics)
 
   implementation(libs.androidx.startup)
   implementation(libs.androidx.core.ktx)
