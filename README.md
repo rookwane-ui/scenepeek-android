@@ -1,5 +1,6 @@
 [![codecov](https://codecov.io/gh/Divinelink/scenepeek-android/graph/badge.svg?token=FPANRF2HZ5)](https://codecov.io/gh/Divinelink/scenepeek-android)
 <img src="https://github.com/Divinelink/scenepeek-android/actions/workflows/coverage_static_analysis.yml/badge.svg" alt="CI">
+[![Join the community](https://img.shields.io/badge/matrix.org-join_community-teal?style=flat-square&logo=matrix)](https://matrix.to/#/#scenepeek:matrix.org)
 
 <div align="center">
 
@@ -44,7 +45,8 @@ The following table outlines the main features of our app:
 | Jellyseerr Requests       | Request movies and TV shows via Jellyseerr    | ✅ Implemented       |
 | Additional Rating Sources | View IMDb & Trakt ratings for all content     | ✅ Implemented       |
 | Discover Feed             | Discover media through advanced filtering     | ✅ Implemented       |
-| TV Show Seasons           | Detailed information about individual seasons | 🚧 Work in Progress |
+| TV Show Seasons           | Detailed information about individual seasons | ✅ Implemented       |
+| Request notifications     | Get notifications on media requests           | 🚧 Work in Progress  |
 
 We are continuously working on improving and expanding these features to enhance the user
 experience. Features marked as "Work in Progress" are actively being developed and will be available
