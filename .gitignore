@@ -9,7 +9,12 @@
 /captures
 .externalNativeBuild
 .idea/assetWizardSettings.xml
-app/release/output-metadata.json
+
+output-metadata.json
+google-fastlane.json
+keystore.jks
+android-release.dm
+keystore.properties
 
 app/schemas/*
 

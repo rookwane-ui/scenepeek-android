@@ -1,0 +1,2 @@
+json_key_file("fastlane/config/google-fastlane.json")
+package_name("com.divinelink.scenepeek")
