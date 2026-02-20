@@ -61,6 +61,15 @@ fun DetailsScreen(
       viewModel.consumeNavigateToLogin()
     }
   }
+
+  val vidsrcNavigation by viewModel.navigateToVidsrc.collectAsStateWithLifecycle()
+
+LaunchedEffect(vidsrcNavigation) {
+    vidsrcNavigation?.let { (id, type) ->
+        onNavigateToVidsrc(id, type)
+        viewModel.onVidsrcNavigated()
+    }
+}
   val rateBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
   val allRatingsBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
@@ -144,6 +153,7 @@ fun DetailsScreen(
       },
       onTabSelected = viewModel::onTabSelected,
       onPlayTrailerClick = { videoUrl = it },
+      onPlayOnVidsrcClick = { viewModel.openVidsrcPlayer() }
       onDeleteRequest = viewModel::onDeleteRequest,
       onDeleteMedia = viewModel::onDeleteMedia,
       onUpdateMediaInfo = viewModel::onUpdateMediaInfo,
