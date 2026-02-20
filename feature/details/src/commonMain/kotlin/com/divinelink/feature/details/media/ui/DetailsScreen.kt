@@ -115,6 +115,7 @@ fun DetailsScreen(
       onNavigate = onNavigate,
       animatedVisibilityScope = animatedVisibilityScope,
       onMarkAsFavoriteClicked = viewModel::onMarkAsFavorite,
+      onPlayOnVidsrcClick = { viewModel.openVidsrcPlayer() } 
       onMediaItemClick = { media ->
         val route = DetailsRoute(
           id = media.id,
