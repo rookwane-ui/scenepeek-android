@@ -79,7 +79,7 @@ dependencies {
   implementation(libs.koin.start.up)
 
   implementation(libs.napier)
-
+implementation(libs.accompanist.webview)
   // Testing Libs
   testImplementation(projects.core.testing)
 
