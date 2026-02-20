@@ -34,3 +34,7 @@ jobs:
         with:
           name: app-debug
           path: app/build/outputs/apk/debug/
+- name: Setup Gradle
+  uses: gradle/actions/setup-gradle@v3
+  with:
+    cache-read-only: true  # يقرأ فقط وميحاولش يكتب
