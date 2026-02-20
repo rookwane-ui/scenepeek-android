@@ -29,6 +29,25 @@ class MainActivity : ComponentActivity() {
       val uiState by viewModel.uiState.collectAsStateWithLifecycle()
       val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle()
 
+var showVidsrcPlayer by remember { mutableStateOf<Pair<Int, String>?>(null) }
+
+LaunchedEffect(viewModel.uiEvent) {
+    when (val event = viewModel.uiEvent.value) {
+        is MainUiEvent.NavigateToVidsrcPlayer -> {
+            showVidsrcPlayer = event.mediaId to event.mediaType
+        }
+        else -> {}
+    }
+}
+
+showVidsrcPlayer?.let { (id, type) ->
+    VidsrcPlayerScreen(
+        mediaId = id,
+        mediaType = type,
+        onClose = { showVidsrcPlayer = null }
+    )
+}
+      
       val state = rememberScenePeekAppState(
         onboardingManager = viewModel.onboardingManager,
         networkMonitor = viewModel.networkMonitor,
