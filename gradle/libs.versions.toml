@@ -221,3 +221,9 @@ divinelink-compose-feature = { id = "com.divinelink.compose.feature", version = 
 
 divinelink-android-application = { id = "divinelink.android.application", version = "unspecified" }
 divinelink-android-feature = { id = "divinelink.android.feature", version = "unspecified" }
+
+[versions]
+accompanist = "0.35.0-alpha"
+
+[libraries]
+accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist" }
