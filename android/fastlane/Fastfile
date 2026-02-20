@@ -1,0 +1,119 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+# Read version info from libs.versions.toml
+toml_path = File.join(__dir__, "../../gradle/libs.versions.toml")
+toml_content = File.read(toml_path)
+
+version_name = toml_content.match(/version-name\s*=\s*"(.+)"/)[1]
+version_code = toml_content.match(/version-code\s*=\s*"(.+)"/)[1]
+
+# Resolve paths relative to the Fastfile location (/android/fastlane/)
+config_dir = File.expand_path("../fastlane/config", Dir.pwd)
+keystore_path = File.join(config_dir, "keystore.jks")
+
+# Read and parse keystore.properties
+keystore_props = File.read(File.join(config_dir, "keystore.properties"))
+  .gsub("\r", "\n")
+  .lines
+  .each_with_object({}) do |line, hash|
+    key, value = line.strip.split("=", 2)
+    next if key.nil? || key.empty? || key.start_with?("#")
+    hash[key] = value&.gsub(/\A"|"\z/, "")
+  end
+
+platform :android do
+  desc "Runs tests"
+  lane :test do
+    gradle(
+      task: "testAndroidHostTest",
+      project_dir: "..",
+    )
+  end
+
+  desc "Submit a new GitHub release & Google Play"
+  lane :release do
+    playstore
+    github
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :playstore do
+    gradle(
+      task: "clean bundleRelease",
+      project_dir: "..",
+      properties: {
+        "android.injected.signing.store.file"     => keystore_path,
+        "android.injected.signing.store.password" => keystore_props["keystore.password"],
+        "android.injected.signing.key.alias"      => keystore_props["keyAlias"],
+        "android.injected.signing.key.password"   => keystore_props["keyPassword"],
+      }
+    )
+
+    upload_to_play_store(
+      skip_upload_apk: true,
+    )
+  end
+
+  desc "Submit a new GitHub release"
+  lane :github do
+    gradle(
+      task: "clean assembleRelease",
+      project_dir: "..",
+      properties: {
+        "android.injected.signing.store.file"     => keystore_path,
+        "android.injected.signing.store.password" => keystore_props["keystore.password"],
+        "android.injected.signing.key.alias"      => keystore_props["keyAlias"],
+        "android.injected.signing.key.password"   => keystore_props["keyPassword"],
+      }
+    )
+
+    app_name = "scenepeek-android"
+    apk_original = lane_context[SharedValues::GRADLE_APK_OUTPUT_PATH]
+    apk_renamed = File.join(File.dirname(apk_original), "#{app_name}-#{version_name}.apk")
+    # rename/copy to new name
+    FileUtils.cp(apk_original, apk_renamed)
+
+    # Create GitHub Release
+    github_release = set_github_release(
+      repository_name: "Divinelink/scenepeek-android",
+      api_token: keystore_props["github"],
+      name: "v#{version_name}",
+      tag_name: "v#{version_name}",
+      commitish: "main",
+      is_generate_release_notes: true,
+      is_prerelease: false,
+      upload_assets: [apk_renamed]
+    )
+  end
+
+  desc "Submit a new Beta Build"
+  lane :beta do
+    gradle(
+      task: "clean bundleRelease",
+      project_dir: "..",
+      properties: {
+        "android.injected.signing.store.file"     => keystore_path,
+        "android.injected.signing.store.password" => keystore_props["keystore.password"],
+        "android.injected.signing.key.alias"      => keystore_props["keyAlias"],
+        "android.injected.signing.key.password"   => keystore_props["keyPassword"],
+      }
+    )
+
+    upload_to_play_store(track: 'beta')
+  end
+end

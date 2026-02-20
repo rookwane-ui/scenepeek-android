@@ -1,0 +1,8 @@
+🎉 Update v0.27.0
+
+- Introduce collections screen! Show if movie belongs to a collection and lists all the movies included in that collection
+- Discover now also include the keyword filter
+- Show keywords on a movie or TV show information that describe its plot or mood
+- Genres and keywords are now clickable, taking you to Discover with the corresponding filter applied
+
+We're constantly working on improvements and new features. Stay tuned for more updates!

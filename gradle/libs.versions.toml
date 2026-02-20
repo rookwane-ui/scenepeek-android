@@ -8,7 +8,6 @@ min-sdk = "26"
 
 firebase-appdistribution-gradle = "5.0.0"
 firebase-crashlytics-gradle = "3.0.2"
-google-services = "4.4.2"
 kotlin = "2.3.0"
 ksp = "2.3.2"
 android-tools = "31.13.2"
@@ -27,7 +26,7 @@ kotlinx-datetime = "0.7.1"
 ktlint-cli = "1.8.0"
 secrets = "2.0.1"
 navigation-compose = "2.9.6"
-
+crashlytics = "19.4.4"
 detekt = "1.23.6"
 
 # Internal Database
@@ -151,10 +150,7 @@ napier = { group = "io.github.aakira", name = "napier", version.ref = "napier" }
 android-youtube-player = { group = "com.pierfrancescosoffritti.androidyoutubeplayer", name = "core", version.ref = "android-youtube-player" }
 
 # Firebase
-firebase-bom = 'com.google.firebase:firebase-bom:33.4.0'
-firebase-crashlytics = 'com.google.firebase:firebase-crashlytics-ktx:19.2.0'
-firebase-analytics = 'com.google.firebase:firebase-analytics-ktx:22.1.2'
-firebase-config = 'com.google.firebase:firebase-config-ktx:22.0.0'
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics-ktx", version.ref = "crashlytics" }
 
 # Database
 datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
@@ -207,7 +203,6 @@ compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-gms = { id = "com.google.gms.google-services", version.ref = "google-services" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
