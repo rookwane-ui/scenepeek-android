@@ -33,6 +33,14 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
+
+fun DetailsScreen(
+  onNavigate: (Navigation) -> Unit,
+  onNavigateToVidsrc: (Int, String) -> Unit, // 👈 ضيف ده
+  animatedVisibilityScope: AnimatedVisibilityScope,
+  viewModel: DetailsViewModel = koinViewModel(),
+  switchViewButtonViewModel: SwitchViewButtonViewModel = koinViewModel(),
+) {
 fun DetailsScreen(
   onNavigate: (Navigation) -> Unit,
   animatedVisibilityScope: AnimatedVisibilityScope,
