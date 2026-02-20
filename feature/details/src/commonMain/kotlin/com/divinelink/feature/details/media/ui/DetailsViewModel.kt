@@ -152,6 +152,9 @@ class DetailsViewModel(
       }
     }
   }
+  //++
+private val _navigateToVidsrc = MutableStateFlow<Pair<Int, String>?>(null)
+val navigateToVidsrc: StateFlow<Pair<Int, String>?> = _navigateToVidsrc.asStateFlow()
 
   init {
     authRepository
@@ -534,6 +537,20 @@ class DetailsViewModel(
         },
       )
     }
+  }
+
+  fun openVidsrcPlayer() {
+    val id = mediaId.value ?: return
+    val type = when (mediaType) {
+        MediaType.MOVIE -> "movie"
+        MediaType.TV -> "tv"
+        else -> return
+    }
+    _navigateToVidsrc.value = id to type
+}
+
+  fun onVidsrcNavigated() {
+    _navigateToVidsrc.value = null
   }
 
   fun onUpdateMediaInfo(mediaInfo: JellyseerrMediaInfo) {
