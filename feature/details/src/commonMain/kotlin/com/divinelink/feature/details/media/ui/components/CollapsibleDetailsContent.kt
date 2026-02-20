@@ -44,6 +44,28 @@ import com.divinelink.core.ui.mediaImageDropShadow
 import com.divinelink.core.ui.rating.MediaRatingItem
 
 @Composable
+
+fun SharedTransitionScope.CollapsibleDetailsContent(
+  modifier: Modifier = Modifier,
+  visibilityScope: AnimatedVisibilityScope,
+  onNavigate: (Navigation) -> Unit,
+  mediaDetails: MediaDetails,
+  accountDataState: Map<AccountDataSection, Boolean>,
+  isOnWatchlist: Boolean,
+  userDetails: AccountMediaDetails?,
+  status: JellyseerrStatus.Media?,
+  ratingCount: RatingCount,
+  ratingSource: RatingSource,
+  hasTrailer: Boolean,
+  canManageRequests: Boolean,
+  onAddToWatchListClick: () -> Unit,
+  onAddRateClick: () -> Unit,
+  onShowAllRatingsClick: () -> Unit,
+  onWatchTrailerClick: () -> Unit,
+  onPlayOnVidsrcClick: () -> Unit, // 👈 ضيف ده
+  onOpenManageModal: () -> Unit,
+) {
+
 fun SharedTransitionScope.CollapsibleDetailsContent(
   modifier: Modifier = Modifier,
   visibilityScope: AnimatedVisibilityScope,
@@ -175,4 +197,17 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
       )
     }
   }
+}
+
+// الزر الجديد
+TextButton(
+  onClick = onPlayOnVidsrcClick,
+  modifier = Modifier
+    .padding(horizontal = MaterialTheme.dimensions.keyline_4)
+) {
+  androidx.compose.material3.Text(
+    text = "▶️ VidSrc",
+    style = MaterialTheme.typography.labelMedium,
+    color = MaterialTheme.colorScheme.primary
+  )
 }
