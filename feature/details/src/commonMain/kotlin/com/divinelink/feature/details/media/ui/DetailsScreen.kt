@@ -79,6 +79,14 @@ fun DetailsScreen(
       )
     }
   }
+  val vidsrcNavigation by viewModel.navigateToVidsrc.collectAsStateWithLifecycle()
+
+LaunchedEffect(vidsrcNavigation) {
+    vidsrcNavigation?.let { (id, type) ->
+        onNavigateToVidsrc(id, type)
+        viewModel.onVidsrcNavigated()
+    }
+}
 
   if (openRateBottomSheet) {
     RateModalBottomSheet(
