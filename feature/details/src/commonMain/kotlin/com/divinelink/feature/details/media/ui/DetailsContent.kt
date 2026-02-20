@@ -412,6 +412,7 @@ private fun SharedTransitionScope.MediaDetailsContent(
           ratingCount = uiState.mediaDetails.ratingCount,
           onAddToWatchListClick = onAddToWatchlistClick,
           onAddRateClick = onAddRateClick,
+          onPlayOnVidsrcClick = onPlayOnVidsrcClick 
           onShowAllRatingsClick = viewAllRatingsClick,
           onWatchTrailerClick = { trailer?.key?.let { onWatchTrailer(it) } },
           onOpenManageModal = onOpenManageModal,
