@@ -50,6 +50,11 @@ class MainViewModel(
     _uiEvent.value = event
   }
 
+
+fun openVidsrcPlayer(mediaId: Int, mediaType: String) {
+    updateUiEvent(MainUiEvent.NavigateToVidsrcPlayer(mediaId, mediaType))
+}
+  
   fun consumeUiEvent() {
     _uiEvent.value = MainUiEvent.None
   }
