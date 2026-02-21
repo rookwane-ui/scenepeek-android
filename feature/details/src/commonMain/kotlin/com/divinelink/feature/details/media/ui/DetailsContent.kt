@@ -125,6 +125,7 @@ fun DetailsContent(
   onShowAllRatingsClick: () -> Unit,
   onTabSelected: (Int) -> Unit,
   onPlayTrailerClick: (String) -> Unit,
+  onPlayOnVidsrcClick: () -> Unit,  // ✅ Added
   onDeleteRequest: (Int) -> Unit,
   onDeleteMedia: (Boolean) -> Unit,
   onUpdateMediaInfo: (JellyseerrMediaInfo) -> Unit,
@@ -303,6 +304,7 @@ fun DetailsContent(
             viewAllRatingsClick = onShowAllRatingsClick,
             onTabSelected = onTabSelected,
             onWatchTrailer = onPlayTrailerClick,
+            onPlayOnVidsrcClick = onPlayOnVidsrcClick,  // ✅ Added
             onShowTitle = { showTitle ->
               toolbarProgress = showTitle
             },
@@ -344,6 +346,7 @@ private fun SharedTransitionScope.MediaDetailsContent(
   viewAllCreditsClick: () -> Unit,
   viewAllRatingsClick: () -> Unit,
   onWatchTrailer: (String) -> Unit,
+  onPlayOnVidsrcClick: () -> Unit,  // ✅ Added
   onTabSelected: (Int) -> Unit,
   onShowTitle: (Float) -> Unit,
   onBackdropLoaded: () -> Unit,
@@ -414,6 +417,7 @@ private fun SharedTransitionScope.MediaDetailsContent(
           onAddRateClick = onAddRateClick,
           onShowAllRatingsClick = viewAllRatingsClick,
           onWatchTrailerClick = { trailer?.key?.let { onWatchTrailer(it) } },
+          onPlayOnVidsrcClick = onPlayOnVidsrcClick,  // ✅ Added
           onOpenManageModal = onOpenManageModal,
         )
       }
@@ -542,6 +546,7 @@ fun DetailsContentPreview(
               onShowAllRatingsClick = {},
               onTabSelected = {},
               onPlayTrailerClick = {},
+              onPlayOnVidsrcClick = {},  // ✅ Added
               onDeleteRequest = {},
               onDeleteMedia = {},
               onSwitchPreferences = {},
