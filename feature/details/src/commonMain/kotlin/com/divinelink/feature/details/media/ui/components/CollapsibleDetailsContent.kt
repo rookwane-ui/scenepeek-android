@@ -145,9 +145,11 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
       }
     }
 
+    // الصف الأول: الأزرار الأساسية (Rating, Watchlist, AddToList)
     Row(
       horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.keyline_8),
       verticalAlignment = Alignment.CenterVertically,
+      modifier = Modifier.fillMaxWidth()
     ) {
       RatingButton(
         modifier = Modifier.weight(4f),
@@ -174,6 +176,25 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
           }
         },
       )
+    }
+    
+    // ✅ الصف الثاني: زر VidSrc منفصل (مركز ومناسب)
+    AnimatedVisibility(onPlayOnVidsrcClick != {}) {
+      Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center,
+      ) {
+        TextButton(
+          onClick = onPlayOnVidsrcClick,
+          modifier = Modifier.padding(vertical = MaterialTheme.dimensions.keyline_8)
+        ) {
+          androidx.compose.material3.Text(
+            text = "▶️ Watch on VidSrc",
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary
+          )
+        }
+      }
     }
   }
 }
