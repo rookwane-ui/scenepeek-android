@@ -137,6 +137,10 @@ class DetailsViewModel(
   private val _openUrlTab = Channel<String>()
   val openUrlTab: Flow<String> = _openUrlTab.receiveAsFlow()
 
+  // 👇 هنا ضيف المتغيرات الجديدة (جوه الـ class)
+  private val _navigateToVidsrc = MutableStateFlow<Pair<Int, String>?>(null)
+  val navigateToVidsrc: StateFlow<Pair<Int, String>?> = _navigateToVidsrc.asStateFlow()
+
   fun onMarkAsFavorite() {
     viewModelScope.launch {
       viewState.value.mediaItem?.let { mediaItem ->
@@ -385,6 +389,23 @@ class DetailsViewModel(
         }
       }
     }
+  }
+
+  // 👇 هنا ضيف الدوال الجديدة تحت init مباشرة
+
+  fun openVidsrcPlayer() {
+    val id = _viewState.value.mediaId
+    val mediaType = _viewState.value.mediaType
+    val type = when (mediaType) {
+        MediaType.MOVIE -> "movie"
+        MediaType.TV -> "tv"
+        else -> return
+    }
+    _navigateToVidsrc.value = id to type
+  }
+
+  fun onVidsrcNavigated() {
+    _navigateToVidsrc.value = null
   }
 
   fun onSubmitRate(rating: Int) {
@@ -899,23 +920,4 @@ class DetailsViewModel(
       )
     }
   }
-}
-//++
-private val _navigateToVidsrc = MutableStateFlow<Pair<Int, String>?>(null)
-val navigateToVidsrc: StateFlow<Pair<Int, String>?> = _navigateToVidsrc.asStateFlow()
-
-
-fun openVidsrcPlayer() {
-    val id = mediaId.value ?: return
-    val type = when (mediaType) {
-        MediaType.MOVIE -> "movie"
-        MediaType.TV -> "tv"
-        else -> return
-    }
-    _navigateToVidsrc.value = id to type
-}
-
-
-fun onVidsrcNavigated() {
-    _navigateToVidsrc.value = null
 }
