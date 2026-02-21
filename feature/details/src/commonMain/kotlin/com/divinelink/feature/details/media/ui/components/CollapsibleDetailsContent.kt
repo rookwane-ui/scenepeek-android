@@ -145,7 +145,7 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
       }
     }
 
-    Row(
+       Row(
       horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.keyline_8),
       verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -174,6 +174,16 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
           }
         },
       )
+
+      // ✅ زر VidSrc الجديد
+      TextButton(
+        onClick = onPlayOnVidsrcClick,
+        modifier = Modifier.padding(horizontal = MaterialTheme.dimensions.keyline_4)
+      ) {
+        androidx.compose.material3.Text(
+          text = "▶️ VidSrc",
+          style = MaterialTheme.typography.labelMedium,
+          color = MaterialTheme.colorScheme.primary
+        )
+      }
     }
-  }
-}
