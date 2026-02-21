@@ -125,6 +125,7 @@ fun DetailsContent(
   onShowAllRatingsClick: () -> Unit,
   onTabSelected: (Int) -> Unit,
   onPlayTrailerClick: (String) -> Unit,
+    onPlayOnVidsrcClick: () -> Unit,
   onDeleteRequest: (Int) -> Unit,
   onDeleteMedia: (Boolean) -> Unit,
   onUpdateMediaInfo: (JellyseerrMediaInfo) -> Unit,
@@ -414,6 +415,7 @@ private fun SharedTransitionScope.MediaDetailsContent(
           onAddRateClick = onAddRateClick,
           onShowAllRatingsClick = viewAllRatingsClick,
           onWatchTrailerClick = { trailer?.key?.let { onWatchTrailer(it) } },
+              onPlayOnVidsrcClick = onPlayOnVidsrcClick,
           onOpenManageModal = onOpenManageModal,
         )
       }
@@ -542,6 +544,7 @@ fun DetailsContentPreview(
               onShowAllRatingsClick = {},
               onTabSelected = {},
               onPlayTrailerClick = {},
+               onPlayOnVidsrcClick = { viewModel.openVidsrcPlayer() },
               onDeleteRequest = {},
               onDeleteMedia = {},
               onSwitchPreferences = {},
