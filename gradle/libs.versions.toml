@@ -5,7 +5,7 @@ version-code = "37"
 compile-sdk = "36"
 target-sdk = "36"
 min-sdk = "26"
-
+accompanist = "0.35.0-alpha"
 firebase-appdistribution-gradle = "5.0.0"
 firebase-crashlytics-gradle = "3.0.2"
 kotlin = "2.3.0"
@@ -96,6 +96,7 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist" }
 
 # Jetpack Compose
 compose-multiplatform-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-multiplatform" }
@@ -222,8 +223,3 @@ divinelink-compose-feature = { id = "com.divinelink.compose.feature", version = 
 divinelink-android-application = { id = "divinelink.android.application", version = "unspecified" }
 divinelink-android-feature = { id = "divinelink.android.feature", version = "unspecified" }
 
-[versions]
-accompanist = "0.35.0-alpha"
-
-[libraries]
-accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist" }
