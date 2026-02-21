@@ -61,6 +61,7 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
   onAddRateClick: () -> Unit,
   onShowAllRatingsClick: () -> Unit,
   onWatchTrailerClick: () -> Unit,
+  onPlayOnVidsrcClick: () -> Unit,
   onOpenManageModal: () -> Unit,
 ) {
   Column(
