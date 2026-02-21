@@ -1,7 +1,7 @@
 [versions]
 version-name = "0.27.0"
 version-code = "37"
-
+accompanist = "0.35.0-alpha"
 compile-sdk = "36"
 target-sdk = "36"
 min-sdk = "26"
@@ -78,7 +78,7 @@ mockito = "5.21.0"
 mockito-kotlin = "6.1.0"
 
 [libraries]
-
+accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist" }
 # Android X
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -222,8 +222,4 @@ divinelink-compose-feature = { id = "com.divinelink.compose.feature", version = 
 divinelink-android-application = { id = "divinelink.android.application", version = "unspecified" }
 divinelink-android-feature = { id = "divinelink.android.feature", version = "unspecified" }
 
-[versions]
-accompanist = "0.35.0-alpha"
 
-[libraries]
-accompanist-webview = { module = "com.google.accompanist:accompanist-webview", version.ref = "accompanist" }
