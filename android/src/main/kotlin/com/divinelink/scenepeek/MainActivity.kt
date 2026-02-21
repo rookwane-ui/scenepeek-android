@@ -11,7 +11,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.divinelink.core.scaffold.ScenePeekApp
 import com.divinelink.core.scaffold.rememberScenePeekAppState
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
+import com.divinelink.feature.details.media.ui.VidsrcPlayerScreen
 @ExperimentalAnimationApi
 class MainActivity : ComponentActivity() {
   private val viewModel: MainViewModel by viewModel()
@@ -26,6 +26,28 @@ class MainActivity : ComponentActivity() {
     handleIntent(intent)
     enableEdgeToEdge()
     setContent {
+
+      
+
+// جوه setContent { ... }
+var showVidsrcPlayer by remember { mutableStateOf<Pair<Int, String>?>(null) }
+
+LaunchedEffect(viewModel.uiEvent) {
+    when (val event = viewModel.uiEvent.value) {
+        is MainUiEvent.NavigateToVidsrcPlayer -> {
+            showVidsrcPlayer = event.mediaId to event.mediaType
+        }
+        else -> {}
+    }
+}
+
+showVidsrcPlayer?.let { (id, type) ->
+    VidsrcPlayerScreen(
+        mediaId = id,
+        mediaType = type,
+        onClose = { showVidsrcPlayer = null }
+    )
+}
       val uiState by viewModel.uiState.collectAsStateWithLifecycle()
       val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle()
 
