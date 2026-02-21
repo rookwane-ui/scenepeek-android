@@ -57,19 +57,21 @@ fun DetailsScreen(
   LaunchedEffect(viewState.navigateToLogin) {
     viewState.navigateToLogin?.let {
       onNavigate(TMDBAuthRoute)
-
       viewModel.consumeNavigateToLogin()
     }
   }
 
+  // ✅ هنا الجزء المهم اللي ضفناه
   val vidsrcNavigation by viewModel.navigateToVidsrc.collectAsStateWithLifecycle()
 
-LaunchedEffect(vidsrcNavigation) {
+  LaunchedEffect(vidsrcNavigation) {
     vidsrcNavigation?.let { (id, type) ->
-        onNavigateToVidsrc(id, type)
-        viewModel.onVidsrcNavigated()
+      // ✅ دي الفنكشن اللي محتاجينها عشان نفتح الشاشة الجديدة
+      // هنضيفها بعد شوية في MainActivity
+      viewModel.onVidsrcNavigated()
     }
-}
+  }
+
   val rateBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
   val allRatingsBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
@@ -153,7 +155,7 @@ LaunchedEffect(vidsrcNavigation) {
       },
       onTabSelected = viewModel::onTabSelected,
       onPlayTrailerClick = { videoUrl = it },
-      onPlayOnVidsrcClick = { viewModel.openVidsrcPlayer() }
+      onPlayOnVidsrcClick = { viewModel.openVidsrcPlayer() }, // ✅ هنا الفرق (فاصلة بعدها)
       onDeleteRequest = viewModel::onDeleteRequest,
       onDeleteMedia = viewModel::onDeleteMedia,
       onUpdateMediaInfo = viewModel::onUpdateMediaInfo,
