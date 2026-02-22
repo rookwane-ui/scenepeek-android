@@ -2,8 +2,9 @@ plugins {
   alias(libs.plugins.divinelink.android.application)
   alias(libs.plugins.compose)
 
-  alias(libs.plugins.firebase.appdistribution)
-  alias(libs.plugins.firebase.crashlytics)
+  // 🔽 Firebase معطل
+  // alias(libs.plugins.firebase.appdistribution)
+  // alias(libs.plugins.firebase.crashlytics)
 }
 
 android {
@@ -19,7 +20,6 @@ android {
 
   signingConfigs {
     create("release") {
-      // ✅ الطريقة الأسهل: اسم الملف الثابت
       val keystoreFile = File(System.getenv("RUNNER_TEMP") + "/keystore/keystore.jks")
       if (keystoreFile.exists()) {
         storeFile = keystoreFile
@@ -27,7 +27,6 @@ android {
         keyAlias = System.getenv("SIGNING_KEY_ALIAS")
         keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
       } else {
-        // للـ build المحلي
         storeFile = file("release.jks")
         storePassword = System.getenv("KEYSTORE_PASSWORD") ?: ""
         keyAlias = System.getenv("KEY_ALIAS") ?: ""
@@ -39,7 +38,6 @@ android {
   buildTypes {
     debug {
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-
       applicationIdSuffix = ".debug"
       versionNameSuffix = " DEBUG"
     }
@@ -48,16 +46,12 @@ android {
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
       signingConfig = signingConfigs.getByName("release")
       
-      // 🔽 أضف السطر ده عشان يوقف Crashlytics في الـ Release build
-      firebaseCrashlytics {
-        mappingFileUploadEnabled = false
-      }
-      
-      firebaseAppDistribution {
-        artifactType = "APK"
-        artifactPath = "android/build/outputs/apk/release/app-release.apk"
-        groups = "development"
-      }
+      // 🔽 Firebase App Distribution معطل
+      // firebaseAppDistribution {
+      //   artifactType = "APK"
+      //   artifactPath = "android/build/outputs/apk/release/app-release.apk"
+      //   groups = "development"
+      // }
     }
   }
 
@@ -73,7 +67,8 @@ dependencies {
   implementation(projects.app)
   implementation(projects.core.android)
 
-  implementation(libs.firebase.crashlytics)
+  // 🔽 Firebase Crashlytics معطل
+  // implementation(libs.firebase.crashlytics)
 
   implementation(libs.androidx.startup)
   implementation(libs.androidx.core.ktx)
