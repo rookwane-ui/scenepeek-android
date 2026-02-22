@@ -48,7 +48,11 @@ android {
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
       signingConfig = signingConfigs.getByName("release")
       
-      // 🔽 علّق Firebase App Distribution دلوقتي
+      // 🔽 أضف السطر ده عشان يوقف Crashlytics في الـ Release build
+      firebaseCrashlytics {
+        mappingFileUploadEnabled = false
+      }
+      
       firebaseAppDistribution {
         artifactType = "APK"
         artifactPath = "android/build/outputs/apk/release/app-release.apk"
