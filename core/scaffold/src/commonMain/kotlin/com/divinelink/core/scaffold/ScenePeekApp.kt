@@ -79,11 +79,6 @@ fun ScenePeekApp(
         state.navController.navigateToPerson(uiEvent.route)
         onConsumeEvent()
       }
-      is MainUiEvent.NavigateToVidsrcPlayer -> {
-        // ✅ هذا الحدث يتم التعامل معه في MainActivity
-        // لا نقوم بأي شيء هنا، فقط نستهلك الحدث
-        onConsumeEvent()
-      }
       MainUiEvent.None -> {
         // Do nothing
       }
