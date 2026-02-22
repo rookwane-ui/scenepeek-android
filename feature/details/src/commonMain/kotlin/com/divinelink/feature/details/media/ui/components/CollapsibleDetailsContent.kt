@@ -61,7 +61,6 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
   onAddRateClick: () -> Unit,
   onShowAllRatingsClick: () -> Unit,
   onWatchTrailerClick: () -> Unit,
-  onPlayOnVidsrcClick: () -> Unit,
   onOpenManageModal: () -> Unit,
 ) {
   Column(
@@ -107,7 +106,6 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
         verticalArrangement = Arrangement.SpaceEvenly,
       ) {
         TitleDetails(mediaDetails = mediaDetails)
-
         AnimatedVisibility(status != null) {
           status?.let {
             JellyseerrStatusPill(
@@ -129,7 +127,6 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
             onClick = onWatchTrailerClick,
           )
         }
-        
         TextButton(
           modifier = Modifier
             .offset(
@@ -142,7 +139,6 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
           MediaRatingItem(
             ratingDetails = ratingCount.getRatingDetails(ratingSource),
             source = ratingSource,
-            title = mediaDetails.title // ✅ لازم يبقى موجود
           )
         }
       }
@@ -151,7 +147,6 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
     Row(
       horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.keyline_8),
       verticalAlignment = Alignment.CenterVertically,
-      modifier = Modifier.fillMaxWidth()
     ) {
       RatingButton(
         modifier = Modifier.weight(4f),
@@ -178,30 +173,6 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
           }
         },
       )
-    }
-    
-    Row(
-      modifier = Modifier.fillMaxWidth(),
-      horizontalArrangement = Arrangement.Center,
-    ) {
-      TextButton(
-        onClick = {
-          val mediaType = when (mediaDetails) {
-            is com.divinelink.core.model.details.Movie -> "movie"
-            is com.divinelink.core.model.details.TV -> "tv"
-            else -> return@TextButton
-          }
-          val url = "https://vidsrc.me/embed/$mediaType/${mediaDetails.id}"
-          onNavigate(Navigation.WebViewRoute(url = url))
-        },
-        modifier = Modifier.padding(vertical = MaterialTheme.dimensions.keyline_8)
-      ) {
-        androidx.compose.material3.Text(
-          text = "▶️ Watch on VidSrc",
-          style = MaterialTheme.typography.labelLarge,
-          color = MaterialTheme.colorScheme.primary
-        )
-      }
     }
   }
 }
