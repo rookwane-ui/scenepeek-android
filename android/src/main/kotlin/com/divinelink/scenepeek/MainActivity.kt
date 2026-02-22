@@ -12,6 +12,7 @@ import com.divinelink.core.scaffold.ScenePeekApp
 import com.divinelink.core.scaffold.rememberScenePeekAppState
 import com.divinelink.core.ui.MainUiEvent
 import org.koin.androidx.viewmodel.ext.android.viewModel
+// ✅ تأكد إن الاستيراد ده موجود
 import com.divinelink.feature.details.media.ui.VidsrcPlayerScreen
 
 @ExperimentalAnimationApi
@@ -40,23 +41,20 @@ class MainActivity : ComponentActivity() {
         navigationProvider = viewModel.navigationProviders,
       )
 
-      ScenePeekApp(
-        state = state,
-        uiState = uiState,
-        uiEvent = uiEvent,
-        onConsumeEvent = viewModel::consumeUiEvent,
-      )
-
-      // ✅ Vidsrc player overlay (بعد ScenePeekApp)
+      // ✅ Vidsrc player overlay
       var showVidsrcPlayer by remember { mutableStateOf<Pair<Int, String>?>(null) }
 
+      // ✅ Handle navigation events
       LaunchedEffect(uiEvent) {
-        if (uiEvent is MainUiEvent.NavigateToVidsrcPlayer) {
-          val event = uiEvent as MainUiEvent.NavigateToVidsrcPlayer
-          showVidsrcPlayer = event.mediaId to event.mediaType
+        when (uiEvent) {
+          is MainUiEvent.NavigateToVidsrcPlayer -> {
+            showVidsrcPlayer = uiEvent.mediaId to uiEvent.mediaType
+          }
+          else -> { /* Do nothing */ }
         }
       }
 
+      // ✅ Show vidsrc player if needed
       showVidsrcPlayer?.let { (id, type) ->
         VidsrcPlayerScreen(
           mediaId = id,
@@ -64,6 +62,14 @@ class MainActivity : ComponentActivity() {
           onClose = { showVidsrcPlayer = null }
         )
       }
+
+      // ✅ Main app
+      ScenePeekApp(
+        state = state,
+        uiState = uiState,
+        uiEvent = uiEvent,
+        onConsumeEvent = viewModel::consumeUiEvent,
+      )
     }
   }
 
