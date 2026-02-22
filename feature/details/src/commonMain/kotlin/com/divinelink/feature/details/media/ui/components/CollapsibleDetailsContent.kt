@@ -142,6 +142,7 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
           MediaRatingItem(
             ratingDetails = ratingCount.getRatingDetails(ratingSource),
             source = ratingSource,
+            title = mediaDetails.title // ✅ لازم يبقى موجود
           )
         }
       }
