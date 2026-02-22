@@ -130,7 +130,7 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
           )
         }
         
-        TextButton(
+              TextButton(
           modifier = Modifier
             .offset(
               y = -MaterialTheme.dimensions.keyline_4,
@@ -142,6 +142,7 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
           MediaRatingItem(
             ratingDetails = ratingCount.getRatingDetails(ratingSource),
             source = ratingSource,
+            title = mediaDetails.title
           )
         }
       }
