@@ -44,13 +44,11 @@ class MainActivity : ComponentActivity() {
       // ✅ Vidsrc player overlay
       var showVidsrcPlayer by remember { mutableStateOf<Pair<Int, String>?>(null) }
 
-      // ✅ Handle navigation events
+      // ✅ Handle navigation events - بدون Smart cast مشكلة
       LaunchedEffect(uiEvent) {
-        when (uiEvent) {
-          is MainUiEvent.NavigateToVidsrcPlayer -> {
-            showVidsrcPlayer = uiEvent.mediaId to uiEvent.mediaType
-          }
-          else -> { /* Do nothing */ }
+        if (uiEvent is MainUiEvent.NavigateToVidsrcPlayer) {
+          showVidsrcPlayer = (uiEvent as MainUiEvent.NavigateToVidsrcPlayer).mediaId to 
+                              (uiEvent as MainUiEvent.NavigateToVidsrcPlayer).mediaType
         }
       }
 
