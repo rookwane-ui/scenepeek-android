@@ -6,14 +6,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.runtime.*
+import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.divinelink.core.scaffold.ScenePeekApp
 import com.divinelink.core.scaffold.rememberScenePeekAppState
-import com.divinelink.core.ui.MainUiEvent
 import org.koin.androidx.viewmodel.ext.android.viewModel
-// ✅ تأكد إن الاستيراد ده موجود
-import com.divinelink.feature.details.media.ui.VidsrcPlayerScreen
 
 @ExperimentalAnimationApi
 class MainActivity : ComponentActivity() {
@@ -29,11 +26,9 @@ class MainActivity : ComponentActivity() {
     handleIntent(intent)
     enableEdgeToEdge()
     setContent {
-      // ✅ UI State from ViewModel
       val uiState by viewModel.uiState.collectAsStateWithLifecycle()
       val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle()
 
-      // ✅ Main app content
       val state = rememberScenePeekAppState(
         onboardingManager = viewModel.onboardingManager,
         networkMonitor = viewModel.networkMonitor,
@@ -41,27 +36,6 @@ class MainActivity : ComponentActivity() {
         navigationProvider = viewModel.navigationProviders,
       )
 
-      // ✅ Vidsrc player overlay
-      var showVidsrcPlayer by remember { mutableStateOf<Pair<Int, String>?>(null) }
-
-      // ✅ Handle navigation events - بدون Smart cast مشكلة
-      LaunchedEffect(uiEvent) {
-        if (uiEvent is MainUiEvent.NavigateToVidsrcPlayer) {
-          showVidsrcPlayer = (uiEvent as MainUiEvent.NavigateToVidsrcPlayer).mediaId to 
-                              (uiEvent as MainUiEvent.NavigateToVidsrcPlayer).mediaType
-        }
-      }
-
-      // ✅ Show vidsrc player if needed
-      showVidsrcPlayer?.let { (id, type) ->
-        VidsrcPlayerScreen(
-          mediaId = id,
-          mediaType = type,
-          onClose = { showVidsrcPlayer = null }
-        )
-      }
-
-      // ✅ Main app
       ScenePeekApp(
         state = state,
         uiState = uiState,
