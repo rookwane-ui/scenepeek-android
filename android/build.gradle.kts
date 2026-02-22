@@ -19,16 +19,20 @@ android {
 
   signingConfigs {
     create("release") {
-      val tmpFilePath = System.getProperty("user.home") + "/work/_temp/keystore/"
-      val allFilesFromDir = File(tmpFilePath).listFiles()
-      if (allFilesFromDir != null) {
-        val keystoreFile = allFilesFromDir.first()
-        keystoreFile.renameTo(File("/keystore/keystore.jks"))
+      // ✅ الطريقة الأسهل: اسم الملف الثابت
+      val keystoreFile = File(System.getenv("RUNNER_TEMP") + "/keystore/keystore.jks")
+      if (keystoreFile.exists()) {
         storeFile = keystoreFile
+        storePassword = System.getenv("SIGNING_STORE_PASSWORD")
+        keyAlias = System.getenv("SIGNING_KEY_ALIAS")
+        keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
+      } else {
+        // للـ build المحلي
+        storeFile = file("release.jks")
+        storePassword = System.getenv("KEYSTORE_PASSWORD") ?: ""
+        keyAlias = System.getenv("KEY_ALIAS") ?: ""
+        keyPassword = System.getenv("KEY_PASSWORD") ?: ""
       }
-      storePassword = System.getenv("SIGNING_STORE_PASSWORD")
-      keyAlias = System.getenv("SIGNING_KEY_ALIAS")
-      keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
     }
   }
 
@@ -43,9 +47,11 @@ android {
       isMinifyEnabled = true
       proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
       signingConfig = signingConfigs.getByName("release")
+      
+      // 🔽 علّق Firebase App Distribution دلوقتي
       firebaseAppDistribution {
         artifactType = "APK"
-        artifactPath = "app/build/outputs/apk/release/app-release.apk"
+        artifactPath = "android/build/outputs/apk/release/app-release.apk"
         groups = "development"
       }
     }
