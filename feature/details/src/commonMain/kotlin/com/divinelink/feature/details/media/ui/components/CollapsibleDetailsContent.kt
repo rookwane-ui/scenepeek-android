@@ -61,7 +61,7 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
   onAddRateClick: () -> Unit,
   onShowAllRatingsClick: () -> Unit,
   onWatchTrailerClick: () -> Unit,
-  onPlayOnVidsrcClick: () -> Unit, // مش هتستخدمها
+  onPlayOnVidsrcClick: () -> Unit,
   onOpenManageModal: () -> Unit,
 ) {
   Column(
@@ -107,6 +107,7 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
         verticalArrangement = Arrangement.SpaceEvenly,
       ) {
         TitleDetails(mediaDetails = mediaDetails)
+        
         AnimatedVisibility(status != null) {
           status?.let {
             JellyseerrStatusPill(
@@ -128,6 +129,7 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
             onClick = onWatchTrailerClick,
           )
         }
+        
         TextButton(
           modifier = Modifier
             .offset(
@@ -137,16 +139,14 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
             .testTag(TestTags.Rating.DETAILS_RATING_BUTTON),
           onClick = onShowAllRatingsClick,
         ) {
-           MediaRatingItem(
+          MediaRatingItem(
             ratingDetails = ratingCount.getRatingDetails(ratingSource),
             source = ratingSource,
-         title = mediaDetails.title
           )
         }
       }
     }
 
-    // الصف الأول: الأزرار الأساسية (Rating, Watchlist, AddToList)
     Row(
       horizontalArrangement = Arrangement.spacedBy(MaterialTheme.dimensions.keyline_8),
       verticalAlignment = Alignment.CenterVertically,
@@ -179,22 +179,18 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
       )
     }
     
-    // ✅ الصف الثاني: زر VidSrc منفصل (هنا بقى الفرق)
     Row(
       modifier = Modifier.fillMaxWidth(),
       horizontalArrangement = Arrangement.Center,
     ) {
       TextButton(
         onClick = {
-          // بناء رابط vidsrc من بيانات الفيلم
           val mediaType = when (mediaDetails) {
             is com.divinelink.core.model.details.Movie -> "movie"
             is com.divinelink.core.model.details.TV -> "tv"
             else -> return@TextButton
           }
           val url = "https://vidsrc.me/embed/$mediaType/${mediaDetails.id}"
-          
-          // فتح WebView مباشرة
           onNavigate(Navigation.WebViewRoute(url = url))
         },
         modifier = Modifier.padding(vertical = MaterialTheme.dimensions.keyline_8)
