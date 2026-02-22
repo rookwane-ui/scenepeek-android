@@ -107,7 +107,7 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
         verticalArrangement = Arrangement.SpaceEvenly,
       ) {
         TitleDetails(mediaDetails = mediaDetails)
-        
+
         AnimatedVisibility(status != null) {
           status?.let {
             JellyseerrStatusPill(
