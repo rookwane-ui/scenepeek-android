@@ -137,9 +137,10 @@ fun SharedTransitionScope.CollapsibleDetailsContent(
             .testTag(TestTags.Rating.DETAILS_RATING_BUTTON),
           onClick = onShowAllRatingsClick,
         ) {
-          MediaRatingItem(
+           MediaRatingItem(
             ratingDetails = ratingCount.getRatingDetails(ratingSource),
             source = ratingSource,
+         title = mediaDetails.title
           )
         }
       }
