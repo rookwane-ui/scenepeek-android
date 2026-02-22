@@ -32,29 +32,6 @@ class MainActivity : ComponentActivity() {
       val uiState by viewModel.uiState.collectAsStateWithLifecycle()
       val uiEvent by viewModel.uiEvent.collectAsStateWithLifecycle()
 
-      // ✅ State for vidsrc player
-      var showVidsrcPlayer by remember { mutableStateOf<Pair<Int, String>?>(null) }
-
-      // ✅ Handle navigation events
-      LaunchedEffect(uiEvent) {
-        when (uiEvent) {
-          is MainUiEvent.NavigateToVidsrcPlayer -> {
-            val event = uiEvent as MainUiEvent.NavigateToVidsrcPlayer
-            showVidsrcPlayer = event.mediaId to event.mediaType
-          }
-          else -> {}
-        }
-      }
-
-      // ✅ Show vidsrc player if needed
-      showVidsrcPlayer?.let { (id, type) ->
-        VidsrcPlayerScreen(
-          mediaId = id,
-          mediaType = type,
-          onClose = { showVidsrcPlayer = null }
-        )
-      }
-
       // ✅ Main app content
       val state = rememberScenePeekAppState(
         onboardingManager = viewModel.onboardingManager,
@@ -69,6 +46,24 @@ class MainActivity : ComponentActivity() {
         uiEvent = uiEvent,
         onConsumeEvent = viewModel::consumeUiEvent,
       )
+
+      // ✅ Vidsrc player overlay (بعد ScenePeekApp)
+      var showVidsrcPlayer by remember { mutableStateOf<Pair<Int, String>?>(null) }
+
+      LaunchedEffect(uiEvent) {
+        if (uiEvent is MainUiEvent.NavigateToVidsrcPlayer) {
+          val event = uiEvent as MainUiEvent.NavigateToVidsrcPlayer
+          showVidsrcPlayer = event.mediaId to event.mediaType
+        }
+      }
+
+      showVidsrcPlayer?.let { (id, type) ->
+        VidsrcPlayerScreen(
+          mediaId = id,
+          mediaType = type,
+          onClose = { showVidsrcPlayer = null }
+        )
+      }
     }
   }
 
